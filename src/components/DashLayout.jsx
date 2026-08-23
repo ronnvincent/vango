@@ -1,10 +1,17 @@
-﻿import { NavLink, Outlet, useNavigate } from "react-router-dom";
+﻿import { useState, useEffect } from "react";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { LogOut, Home, User, Plus, Truck, Users, LayoutDashboard, Settings, BarChart } from "lucide-react";
+import { LogOut, Home, User, Plus, Truck, Users, LayoutDashboard, Settings, BarChart, Menu, X } from "lucide-react";
 
 export default function DashLayout({ role }) {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -36,8 +43,12 @@ export default function DashLayout({ role }) {
 
   return (
     <div className="shell">
-      <aside className="side">
-        <div className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></div>
+      {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
+      <aside className={`side ${menuOpen ? 'open' : ''}`}>
+        <div className="wordmark" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <img src="/logo.png" alt="VanGo Logo" />
+          <button className="mobile-close-btn" onClick={() => setMenuOpen(false)}><X size={24} /></button>
+        </div>
         <nav className="side-nav">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => (isActive ? "active" : "")} end={to === "/app" || to === "/driver" || to === "/admin"}>
@@ -58,12 +69,14 @@ export default function DashLayout({ role }) {
       </aside>
       <main className="main">
         <header className="topbar">
+          <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)}>
+            <Menu size={24} />
+          </button>
           <div className="lbl" style={{ fontSize: "1rem" }}>{role.toUpperCase()} DISPATCH</div>
-          <div className="lbl">{today}</div>
+          <div className="lbl" style={{ marginLeft: "auto" }}>{today}</div>
         </header>
         <Outlet />
       </main>
     </div>
   );
 }
-
