@@ -78,8 +78,19 @@ export default function AdminBookings() {
             </thead>
             <tbody>
               {filtered.map(b => (
-                <tr key={b.id} style={{ cursor: "pointer" }} onClick={() => navigate(`/admin/bookings/${b.id}`)}>
-                  <td style={{ color: "var(--accent)", fontFamily: "'IBM Plex Mono'" }}>{b.reference}</td>
+                <tr
+                  key={b.id}
+                  tabIndex={0}
+                  className="row-link"
+                  onClick={() => navigate(`/admin/bookings/${b.id}`)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate(`/admin/bookings/${b.id}`);
+                    }
+                  }}
+                >
+                  <td className="ref-cell">{b.reference}</td>
                   <td>{b.customer?.full_name}</td>
                   <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
                   <td>{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>

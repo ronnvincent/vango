@@ -45,14 +45,14 @@ export default function DashLayout({ role }) {
     <div className="shell">
       {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
       <aside className={`side ${menuOpen ? 'open' : ''}`}>
-        <div className="wordmark" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="wordmark side-head">
           <img src="/logo.png" alt="VanGo Logo" />
           <button className="mobile-close-btn" onClick={() => setMenuOpen(false)}><X size={24} /></button>
         </div>
         <nav className="side-nav">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => (isActive ? "active" : "")} end={to === "/app" || to === "/driver" || to === "/admin"}>
-              <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span className="nav-ic">
                 <Icon size={16} />
                 {label}
               </span>
@@ -60,7 +60,7 @@ export default function DashLayout({ role }) {
           ))}
         </nav>
         <div className="side-bottom">
-          <div className="lbl" style={{ marginBottom: "0.5rem" }}>{profile?.full_name}</div>
+          <div className="lbl side-user">{profile?.full_name}</div>
           <button className="signout-btn" onClick={handleSignOut}>
             <LogOut size={16} />
             Sign Out
@@ -72,8 +72,8 @@ export default function DashLayout({ role }) {
           <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)}>
             <Menu size={24} />
           </button>
-          <div className="lbl" style={{ fontSize: "1rem" }}>{role.toUpperCase()} DISPATCH</div>
-          <div className="lbl" style={{ marginLeft: "auto" }}>{today}</div>
+          <div className="lbl topbar-title">{role.toUpperCase()} DISPATCH</div>
+          <div className="lbl topbar-date">{today}</div>
         </header>
         <Outlet />
       </main>

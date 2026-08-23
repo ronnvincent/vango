@@ -82,15 +82,26 @@ export default function DriverHome() {
             </thead>
             <tbody>
               {manifest.map(b => (
-                <tr key={b.id} style={{ cursor: "pointer" }} onClick={() => navigate(`/driver/trips/${b.id}`)}>
-                  <td style={{ fontFamily: "'IBM Plex Mono'", fontWeight: 500 }}>
+                <tr
+                  key={b.id}
+                  tabIndex={0}
+                  className="row-link"
+                  onClick={() => navigate(`/driver/trips/${b.id}`)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      navigate(`/driver/trips/${b.id}`);
+                    }
+                  }}
+                >
+                  <td className="time-cell">
                     {new Date(b.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </td>
                   <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
                   <td>{String(b.passengers).padStart(2, "0")}</td>
                   <td>{b.vans?.class.toUpperCase()}</td>
                   <td><StatusBadge status={b.status} /></td>
-                  <td style={{ textAlign: "right", color: "var(--accent)" }}>OPEN →</td>
+                  <td className="open-cell">OPEN →</td>
                 </tr>
               ))}
             </tbody>

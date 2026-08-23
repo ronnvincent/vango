@@ -46,13 +46,13 @@ export default function CustomerHome() {
         <div className="lbl">Loading…</div>
       ) : filtered.length === 0 ? (
         <div className="empty">
-          <p style={{ marginBottom: "1.5rem" }}>No trips on the manifest yet</p>
-          <button className="btn btn-solid" onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
+          <p className="empty-msg">No trips on the manifest yet</p>
+          <button className="btn btn-solid empty-cta" onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
         </div>
       ) : (
         <>
-          <button className="btn btn-solid" style={{ marginBottom: "2rem" }} onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
-          <div style={{ overflowX: "auto" }}>
+          <button className="btn btn-solid list-cta" onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
+          <div className="table-wrap">
             <table className="table">
               <thead>
                 <tr>
@@ -66,13 +66,24 @@ export default function CustomerHome() {
               </thead>
               <tbody>
                 {filtered.map(b => (
-                  <tr key={b.id} style={{ cursor: "pointer" }} onClick={() => navigate(`/app/bookings/${b.id}`)}>
-                    <td style={{ color: "var(--accent)", fontFamily: "'IBM Plex Mono'" }}>{b.reference}</td>
+                  <tr
+                    key={b.id}
+                    tabIndex={0}
+                    className="row-link"
+                    onClick={() => navigate(`/app/bookings/${b.id}`)}
+                    onKeyDown={e => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate(`/app/bookings/${b.id}`);
+                      }
+                    }}
+                  >
+                    <td className="ref-cell">{b.reference}</td>
                     <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
                     <td>{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
                     <td><StatusBadge status={b.status} /></td>
                     <td>{money(b.fare)}</td>
-                    <td style={{ textAlign: "right" }}>→</td>
+                    <td className="arr-cell">→</td>
                   </tr>
                 ))}
               </tbody>

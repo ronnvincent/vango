@@ -80,6 +80,21 @@ h2{font-family:'Archivo Black';text-transform:uppercase;letter-spacing:-.01em;li
 .table td{padding:.7rem .8rem;border-bottom:1px solid var(--hair);vertical-align:middle}
 .table tr:hover td{background:rgba(23,21,18,.04)}
 .empty{border:1.5px dashed var(--line);padding:3rem 1.5rem;text-align:center;color:rgba(23,21,18,.55);font-family:'IBM Plex Mono';font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.table-wrap{overflow-x:auto}
+.row-link{cursor:pointer}
+.row-link:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ref-cell{color:var(--accent);font-family:'IBM Plex Mono'}
+.arr-cell{text-align:right}
+.time-cell{font-family:'IBM Plex Mono';font-weight:500}
+.open-cell{text-align:right;color:var(--accent)}
+.list-cta{margin-bottom:2rem}
+.empty-msg{margin-bottom:1.5rem}
+.empty-cta{margin-bottom:1.5rem}
+.side-head{display:flex;justify-content:space-between;align-items:center}
+.nav-ic{display:flex;align-items:center;gap:.5rem}
+.side-user{margin-bottom:.5rem}
+.topbar-title{font-size:1rem}
+.topbar-date{margin-left:auto}
 
 
 /* LANDING PAGE EXTENSIONS */
@@ -117,9 +132,6 @@ body.nav-open .m-menu{transform:none}
 .bp .tag-txt{font-family:'IBM Plex Mono';font-size:11px;fill:rgba(23,21,18,.55);stroke:none}
 .draw{stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 1.6s .2s ease forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
-.bp:hover .wheel{animation:spin 1.4s linear infinite}
-.wheel{transform-origin:center;transform-box:fill-box}
-@keyframes spin{to{transform:rotate(360deg)}}
 .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
 .stat-cell{padding:1.4rem 1.6rem;border-right:1px solid var(--line)}
 .stat-cell:last-child{border-right:none}
@@ -233,7 +245,7 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 .section-title{font-family:'Archivo Black';font-size:1.2rem;text-transform:uppercase;letter-spacing:-.01em;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--ink)}
 
 
-@media(max-width:500px){.duo{flex-direction:column}.duo .btn{width:100%;text-align:center}.info-row{flex-direction:column;gap:0.25rem}.info-row .lbl{width:100%}}
+@media(max-width:500px){.duo{grid-template-columns:1fr}.duo .btn{width:100%;text-align:center}.info-row{flex-direction:column;gap:0.25rem}.info-row .lbl{width:100%}}
 
 .mobile-menu-btn, .mobile-close-btn, .menu-overlay { display: none; }
 @media(max-width:900px){
@@ -255,8 +267,8 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 
 
 /* VAN ANIMATIONS */
-@keyframes spin { 100% { transform: rotate(360deg); } }
 .wheel { transform-box: fill-box; transform-origin: center; animation: spin 0.25s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 @keyframes roadMove { 100% { stroke-dashoffset: 120; } }
 .road-line { stroke-dasharray: 40 20; animation: roadMove 0.3s linear infinite; }

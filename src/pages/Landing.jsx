@@ -146,21 +146,19 @@ function TextPressure({ text = "VAN\u2014GO" }) {
   useEffect(() => {
     if (reduced() || !ref.current) return;
     const chars = [...ref.current.querySelectorAll("span")];
-    const pos = { x: -99999, y: -99999 };
-    const move = e => { pos.x = e.clientX; pos.y = e.clientY; };
-    window.addEventListener("mousemove", move);
-    let raf;
-    const tick = () => {
+    let raf = null;
+    const apply = e => {
+      raf = null;
       for (const c of chars) {
         const r = c.getBoundingClientRect();
-        const d = Math.hypot(pos.x - (r.left + r.width/2), pos.y - (r.top + r.height/2));
+        const d = Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2));
         let p = Math.max(0, 1 - d/240); p = p*p*(3-2*p);
         c.style.fontVariationSettings = `'wght' ${150 + 750*p}, 'wdth' ${68 + 57*p}`;
       }
-      raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("mousemove", move); };
+    const move = e => { if (raf === null) raf = requestAnimationFrame(() => apply(e)); };
+    window.addEventListener("mousemove", move);
+    return () => { window.removeEventListener("mousemove", move); if (raf !== null) cancelAnimationFrame(raf); };
   }, []);
   return (
     <div ref={ref} className="foot-word" aria-hidden="true">
