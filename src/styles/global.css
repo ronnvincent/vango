@@ -252,3 +252,11 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 }
 
 
+
+/* VAN ANIMATIONS */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.wheel { transform-box: fill-box; transform-origin: center; animation: spin 1.2s linear infinite; }
+@keyframes roadMove { 100% { stroke-dashoffset: 120; } }
+.road-line { stroke-dasharray: 20 20; animation: roadMove 0.8s linear infinite; }
+@keyframes vanBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+.van-body { animation: vanBounce 0.3s ease-in-out infinite; }
