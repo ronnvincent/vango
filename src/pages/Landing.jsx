@@ -282,7 +282,7 @@ export default function Landing() {
                 <path className="draw" d="M70 178 L70 92 Q70 58 108 56 L330 56 Q352 58 372 84 L398 118 Q404 126 404 138 L404 178 Z" />
                 <path className="draw" d="M96 96 Q98 74 122 72 L196 72 L196 116 L96 116 Z" />
                 <rect className="draw" x="212" y="72" width="88" height="44" />
-                <rect className="draw" x="316" y="72" width="62" height="44" />
+                <path className="draw" d="M316 72 L348 72 L370 116 L316 116 Z" />
                 <line className="draw" x1="204" y1="66" x2="204" y2="176" />
                 <rect className="draw" x="182" y="128" width="14" height="4" />
                 <line className="draw" x1="70" y1="146" x2="404" y2="146" />
@@ -501,6 +501,7 @@ export default function Landing() {
     </>
   );
 }
+
 
 
 
