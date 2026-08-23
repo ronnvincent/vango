@@ -1,0 +1,54 @@
+﻿import { useState } from "react";
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useAuth, homeFor } from "../../hooks/useAuth";
+
+export default function Login() {
+  const { signIn, session, profile } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (session && profile) return <Navigate to={homeFor(profile.role)} replace />;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    const { error } = await signIn({ email, password });
+    if (error) setError(error.message);
+    setLoading(false);
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <Link to="/" className="wordmark">VAN<i>—</i>GO</Link>
+        <div className="panel">
+          <form onSubmit={handleSubmit}>
+            <div className="sec-head" style={{ marginTop: 0 }}>
+              <div>
+                <span className="idx">SECURE</span>
+                <h2 style={{ fontSize: "1.6rem" }}>Sign In</h2>
+              </div>
+            </div>
+            {error && <div className="auth-error">▲ {error}</div>}
+            <div className="field">
+              <label>Email</label>
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} disabled={loading} />
+            </div>
+            <div className="field">
+              <label>Password</label>
+              <input type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
+            </div>
+            <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
+              {loading ? "Authenticating…" : "Sign In →"}
+            </button>
+          </form>
+          <Link to="/signup" className="auth-link">Don't have an account? Sign up</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
