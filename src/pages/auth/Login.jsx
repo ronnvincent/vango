@@ -53,6 +53,7 @@ export default function Login() {
             </button>
           </form>
           <Link to="/signup" className="auth-link">Don't have an account? Sign up</Link>
+          <p className="lbl help-line">Trouble signing in? Call dispatch — <a href="tel:+15550000000">+1 (555) 000-0000</a>.</p>
         </div>
       </div>
     </div>

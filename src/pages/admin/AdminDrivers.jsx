@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import { TableSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 
 export default function AdminDrivers() {
@@ -34,7 +35,7 @@ export default function AdminDrivers() {
     load();
   };
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <TableSkeleton rows={5} label="Loading drivers…" />;
 
   return (
     <>

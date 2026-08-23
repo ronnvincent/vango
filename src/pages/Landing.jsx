@@ -266,8 +266,8 @@ export default function Landing() {
               <p className="hero-sub">Point-to-point van service. Flat base fare. Live dispatch. No surge pricing — ever.</p>
               <p className="hero-sub" style={{ marginTop: "0.6rem" }}>Built for&nbsp;<RotatingText words={["CREWS", "WEDDINGS", "AIRPORT RUNS", "CARGO", "GAME DAY", "TOUR GROUPS"]} /></p>
               <div className="hero-cta">
-                <Magnet><a className="btn btn-solid" href="#manifest">Start a manifest ↓</a></Magnet>
-                <Magnet strength={0.22}><a className="btn" href="#fleet">Inspect the fleet</a></Magnet>
+                <Magnet><a className="btn btn-solid" href="#manifest">Get an instant quote ↓</a></Magnet>
+                <Magnet strength={0.22}><a className="btn" href="#fleet">See the vans</a></Magnet>
               </div>
             </div>
 

@@ -2,6 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Ticket from "../../components/Ticket";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 import { money, CLASS_META } from "../../lib/pricing";
 
@@ -42,7 +43,7 @@ export default function AdminBookingDetail() {
 
   useEffect(load, [id]);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <DetailSkeleton label="Loading the booking…" />;
   if (!b) return <div className="empty">Manifest not found</div>;
 
   const handleAssign = async () => {

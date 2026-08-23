@@ -1,7 +1,8 @@
 ﻿import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import StatusBadge from "../../components/StatusBadge";
+import { TableSkeleton } from "../../components/Skeleton";
 import { money } from "../../lib/pricing";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -35,23 +36,23 @@ export default function CustomerHome() {
   return (
     <>
       <div className="filter-chips">
-        {["ALL", "UPCOMING", "PAST", "CANCELLED"].map(f => (
+        {[["ALL", "All Trips"], ["UPCOMING", "Upcoming"], ["PAST", "Past"], ["CANCELLED", "Cancelled"]].map(([f, label]) => (
           <button key={f} className={`chip ${filter === f ? "active" : ""}`} onClick={() => setFilter(f)}>
-            {f}
+            {label}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="lbl">Loading…</div>
+        <TableSkeleton rows={4} label="Loading your trips…" />
       ) : filtered.length === 0 ? (
         <div className="empty">
-          <p className="empty-msg">No trips on the manifest yet</p>
-          <button className="btn btn-solid empty-cta" onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
+          <p className="empty-msg">You haven't booked any trips yet.</p>
+          <button className="btn btn-solid empty-cta" onClick={() => navigate("/app/book/new")}>＋ Book a Van</button>
         </div>
       ) : (
         <>
-          <button className="btn btn-solid list-cta" onClick={() => navigate("/app/book/new")}>＋ NEW BOOKING</button>
+          <button className="btn btn-solid list-cta" onClick={() => navigate("/app/book/new")}>＋ Book a Van</button>
           <div className="table-wrap">
             <table className="table">
               <thead>

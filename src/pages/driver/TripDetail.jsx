@@ -2,6 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Ticket from "../../components/Ticket";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 import { money, CLASS_META } from "../../lib/pricing";
 
@@ -28,7 +29,7 @@ export default function TripDetail() {
 
   useEffect(load, [id]);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <DetailSkeleton label="Loading the trip…" />;
   if (!b) return <div className="empty">Trip not found</div>;
 
   const handleStart = async () => {
@@ -36,7 +37,7 @@ export default function TripDetail() {
     setBusy(true);
     const { error } = await supabase.from("bookings").update({ status: 'en_route' }).eq("id", b.id);
     setBusy(false);
-    if (error) return toast("[ ERR ] Could not start trip. Try again.");
+    if (error) return toast("Sorry, we couldn't start the trip. Please try again.");
     toast("[ OK ] Trip started.");
     load();
   };
@@ -49,7 +50,7 @@ export default function TripDetail() {
 
     const { error } = await supabase.from("bookings").update(updates).eq("id", b.id);
     setBusy(false);
-    if (error) return toast("[ ERR ] Could not close out trip. Try again.");
+    if (error) return toast("Sorry, we couldn't close out the trip. Please try again.");
     toast(`[ OK ] Trip closed out.${b.pay_method === 'cash' ? ' Cash collected.' : ''}`);
     navigate("/driver");
   };

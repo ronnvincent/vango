@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import StatusBadge from "../../components/StatusBadge";
+import { TableSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 import { CLASS_META } from "../../lib/pricing";
 
@@ -61,7 +62,7 @@ export default function AdminFleet() {
     load();
   };
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <TableSkeleton rows={4} label="Loading the fleet…" />;
 
   return (
     <>

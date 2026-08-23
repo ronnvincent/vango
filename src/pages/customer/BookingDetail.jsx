@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Ticket from "../../components/Ticket";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import { statusLabel } from "../../components/StatusBadge";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 import { money, CLASS_META, canCancelFree } from "../../lib/pricing";
 
@@ -30,7 +32,7 @@ export default function BookingDetail() {
 
   useEffect(load, [id]);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <DetailSkeleton label="Loading your trip…" />;
   if (!b) return <div className="empty">Manifest not found</div>;
 
   const states = ["pending", "confirmed", "assigned", "en_route", "completed"];
@@ -42,8 +44,8 @@ export default function BookingDetail() {
     setBusy(true);
     const { error } = await supabase.from("bookings").update({ status: 'confirmed', pay_method: method }).eq("id", b.id);
     setBusy(false);
-    if (error) return toast("[ ERR ] Could not confirm booking. Try again.");
-    toast(`[ OK ] Manifest confirmed. Payment: ${method}`);
+    if (error) return toast("Sorry, we couldn't confirm your booking. Please try again.");
+    toast("Your trip is confirmed!");
     load();
   };
 
@@ -54,8 +56,8 @@ export default function BookingDetail() {
     const { error } = await supabase.from("bookings").update({ status: 'cancelled' }).eq("id", b.id);
     setBusy(false);
     setAskCancel(false);
-    if (error) return toast("[ ERR ] Could not cancel booking. Try again.");
-    toast(`[ OK ] Manifest cancelled${free ? "" : " (Fee applied)"}.`);
+    if (error) return toast("Sorry, we couldn't cancel your booking. Please try again.");
+    toast(free ? "Your booking is cancelled. No fee charged." : "Your booking is cancelled. A late fee will apply.");
     load();
   };
 
@@ -105,7 +107,7 @@ export default function BookingDetail() {
           <div className="timeline">
             {states.map((s, i) => (
               <div key={s} className={`tl-item ${i < cIdx ? "done" : ""} ${i === cIdx ? "current" : ""}`}>
-                <div className="tl-label">{s.replace("_", " ")}</div>
+                <div className="tl-label">{statusLabel(s)}</div>
               </div>
             ))}
           </div>

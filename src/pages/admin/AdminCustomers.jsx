@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import { TableSkeleton } from "../../components/Skeleton";
 import { money } from "../../lib/pricing";
 
 export default function AdminCustomers() {
@@ -32,7 +33,7 @@ export default function AdminCustomers() {
     });
   }, []);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <TableSkeleton rows={6} label="Loading customers…" />;
 
   return (
     <>

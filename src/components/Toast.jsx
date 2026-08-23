@@ -10,5 +10,5 @@
   el.innerHTML = msg;
   el.classList.add("show");
   clearTimeout(window._vangoToastTimer);
-  window._vangoToastTimer = setTimeout(() => el.classList.remove("show"), 4500);
+  window._vangoToastTimer = setTimeout(() => el.classList.remove("show"), 7000);
 }

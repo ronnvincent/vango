@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import StatusBadge from "../../components/StatusBadge";
+import { TableSkeleton } from "../../components/Skeleton";
 import { money } from "../../lib/pricing";
 
 export default function AdminBookings() {
@@ -62,7 +63,7 @@ export default function AdminBookings() {
       </div>
 
       {loading ? (
-        <div className="lbl">Loading…</div>
+        <TableSkeleton rows={6} label="Loading bookings…" />
       ) : (
         <div style={{ overflowX: "auto" }}>
           <table className="table">

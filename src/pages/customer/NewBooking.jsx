@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Ticket from "../../components/Ticket";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 import { useAuth } from "../../hooks/useAuth";
 import { computeFare, makeRef, CLASS_META, money } from "../../lib/pricing";
@@ -90,17 +91,17 @@ export default function NewBooking() {
       }).select().single();
       
       if (!error) {
-        toast(`[ OK ] Manifest ${ref} logged.`);
+        toast(`Your trip is booked! Your reference is ${ref}.`);
         navigate(`/app/bookings/${data.id}`);
         return;
       }
       ref = makeRef();
     }
-    toast("Error creating manifest. Please try again.");
+    toast("Sorry, we couldn't complete your booking. Please try again, or call dispatch.");
     setLoading(false);
   };
 
-  if (!settings) return <div className="lbl">Loading…</div>;
+  if (!settings) return <DetailSkeleton label="Loading the booking form…" />;
 
   return (
     <form className="manifest" onSubmit={handleSubmit}>
@@ -150,16 +151,17 @@ export default function NewBooking() {
             <output>{String(pax).padStart(2, "0")}</output>
             <button type="button" onClick={() => setPax(Math.min(19, pax + 1))}>+</button>
           </div>
-          {overCap && <p className="overcap show">Over capacity — size up the van class</p>}
+          {overCap && <p className="overcap show">Too many passengers — pick a bigger van above</p>}
         </div>
         <div className="fare-bar" aria-live="polite">
           <span className="lbl">{fromName} → {toName}</span>
-          <b>{overCap ? "FIX PAX" : money(fare)}</b>
+          <b>{overCap ? "—" : money(fare)}</b>
         </div>
         <div style={{ marginTop: "2rem" }}>
           <button type="submit" className="btn btn-solid" style={{ width: "100%", padding: "1.2rem", fontSize: "1.1rem" }} disabled={overCap || from === to || loading}>
-            {loading ? "Logging…" : "ISSUE BOOKING"}
+            {loading ? "Booking your van…" : "Confirm Booking"}
           </button>
+          <p className="lbl help-line">Prefer to book by phone? Call dispatch — <a href="tel:+15550000000">+1 (555) 000-0000</a>. We're open 24 / 7.</p>
         </div>
       </div>
       <div>

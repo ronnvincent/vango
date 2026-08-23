@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 export default function AdminReports() {
@@ -56,7 +57,7 @@ export default function AdminReports() {
       });
   }, []);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return <DetailSkeleton label="Loading the report…" />;
 
   return (
     <div className="duo" style={{ gap: "3rem" }}>

@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import { DetailSkeleton } from "../../components/Skeleton";
 import { toast } from "../../components/Toast";
 
 export default function AdminSettings() {
@@ -22,7 +23,7 @@ export default function AdminSettings() {
     setSaving(false);
   };
 
-  if (!settings) return <div className="lbl">Loading…</div>;
+  if (!settings) return <DetailSkeleton label="Loading settings…" />;
 
   return (
     <div className="panel" style={{ maxWidth: "480px" }}>

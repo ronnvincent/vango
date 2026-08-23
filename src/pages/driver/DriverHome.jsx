@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import StatusBadge from "../../components/StatusBadge";
+import { TableSkeleton, CardsSkeleton } from "../../components/Skeleton";
 import { useAuth } from "../../hooks/useAuth";
 import { money } from "../../lib/pricing";
 
@@ -44,7 +45,13 @@ export default function DriverHome() {
     });
   }, [session.user.id]);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return (
+    <>
+      <CardsSkeleton n={3} label="Loading your day…" />
+      <h2 className="section-title">Today's Manifest</h2>
+      <TableSkeleton rows={4} />
+    </>
+  );
 
   return (
     <>
@@ -66,7 +73,7 @@ export default function DriverHome() {
       <h2 className="section-title">Today's Manifest</h2>
 
       {manifest.length === 0 ? (
-        <div className="empty">Nothing assigned yet — dispatch will call.</div>
+        <div className="empty">No trips assigned yet. Dispatch will assign your trips here.</div>
       ) : (
         <div style={{ overflowX: "auto" }}>
           <table className="table">

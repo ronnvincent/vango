@@ -2,6 +2,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import StatusBadge from "../../components/StatusBadge";
+import { TableSkeleton, CardsSkeleton } from "../../components/Skeleton";
 import { money } from "../../lib/pricing";
 
 export default function AdminOverview() {
@@ -36,7 +37,12 @@ export default function AdminOverview() {
     });
   }, []);
 
-  if (loading) return <div className="lbl">Loading…</div>;
+  if (loading) return (
+    <>
+      <CardsSkeleton n={4} label="Loading the overview…" />
+      <TableSkeleton rows={4} />
+    </>
+  );
 
   return (
     <>
