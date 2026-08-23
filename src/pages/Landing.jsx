@@ -212,17 +212,22 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
+    const els = [...document.querySelectorAll(".rv")];
+    // Reveal when entering the viewport OR already scrolled past (deep links
+    // like /#fleet can land mid-page before the observer exists).
     const io = new IntersectionObserver(es => es.forEach(e => {
-      // Reveal when entering the viewport OR when the element is already
-      // scrolled PAST (deep-links like /#fleet can land mid-page before
-      // the observer exists — those must never stay hidden).
       if (e.isIntersecting || e.boundingClientRect.top < 0) {
         e.target.classList.add("on");
         io.unobserve(e.target);
       }
     }), { threshold: 0.05 });
-    document.querySelectorAll(".rv").forEach(el => io.observe(el));
-    return () => io.disconnect();
+    els.forEach(el => io.observe(el));
+    // Safety net: nothing may stay hidden, whatever the engine does.
+    const failsafe = setTimeout(() => {
+      els.forEach(el => el.classList.add("on"));
+      io.disconnect();
+    }, 2500);
+    return () => { clearTimeout(failsafe); io.disconnect(); };
   }, []);
 
   const handleSpotlight = (e, ref) => {

@@ -36,6 +36,30 @@
               }
             });
             console.log("Overflow scan done:", hits, "elements wider than", w);
+
+            // Fleet diagnostics
+            setTimeout(function () {
+              try {
+                var rows = document.querySelectorAll(".fleet-row");
+                var info = {
+                  intersectionObserver: typeof IntersectionObserver !== "undefined",
+                  rowCount: rows.length,
+                  rows: [].map.call(rows, function (el) {
+                    var r = el.getBoundingClientRect();
+                    return {
+                      name: (el.querySelector(".f-name") || {}).textContent,
+                      cls: el.className,
+                      opacity: getComputedStyle(el).opacity,
+                      top: Math.round(r.top),
+                      height: Math.round(r.height)
+                    };
+                  })
+                };
+                console.log("FLEET DIAG:", JSON.stringify(info, null, 1));
+              } catch (err) {
+                console.log("FLEET DIAG ERROR:", err.message);
+              }
+            }, 5000);
             eruda.get("console").log("Overflow elements found: " + hits);
           }, 4000);
         };
