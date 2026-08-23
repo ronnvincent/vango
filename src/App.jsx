@@ -5,6 +5,7 @@ import DashLayout from "./components/DashLayout";
 import Landing from "./pages/Landing";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
+import Welcome from "./pages/auth/Welcome";
 
 import CustomerHome from "./pages/customer/CustomerHome";
 import NewBooking from "./pages/customer/NewBooking";
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/welcome" element={<Welcome />} />
 
       {/* Customer */}
       <Route path="/app" element={<RequireRole role="customer"><DashLayout role="customer" /></RequireRole>}>

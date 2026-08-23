@@ -17,7 +17,7 @@ export function AuthProvider({ children }){
       .then(({data})=>{ setProfile(data); setLoading(false); });
   },[session?.user?.id]);
   const signUp  = ({email,password,fullName,phone}) =>
-    supabase.auth.signUp({email,password,options:{data:{full_name:fullName,phone}}});
+    supabase.auth.signUp({email,password,options:{data:{full_name:fullName,phone},emailRedirectTo: `${window.location.origin}/welcome`}});
   const signIn  = ({email,password}) => supabase.auth.signInWithPassword({email,password});
   const signOut = () => supabase.auth.signOut();
   return <Ctx.Provider value={{session,profile,loading,signUp,signIn,signOut}}>{children}</Ctx.Provider>;
