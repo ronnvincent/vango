@@ -229,14 +229,6 @@ export default function Landing() {
 
   return (
     <>
-      <div className="ticker" aria-hidden="true">
-        <div className="ticker-track">
-          {Array(8).fill(`VANGO<span style="color:var(--accent)">®</span> POINT-TO-POINT VAN SERVICE <b>●</b> FLAT BASE FARE $10 <b>●</b> NO SURGE <b>●</b> 24/7 DISPATCH <b>●</b> `).map((t, i) => (
-            <span key={i} dangerouslySetInnerHTML={{ __html: t }} />
-          ))}
-        </div>
-      </div>
-
       <header className="nav">
         <div className="wrap nav-in">
           <a href="#top" className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></a>
@@ -509,6 +501,7 @@ export default function Landing() {
     </>
   );
 }
+
 
 
 
