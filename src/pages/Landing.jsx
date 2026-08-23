@@ -467,6 +467,27 @@ export default function Landing() {
             </div>
           </div>
         </section>
+        <section id="drive" className="landing-section wrap">
+          <div className="sec-head rv">
+            <div><span className="idx">05</span><h2>Be one of us</h2></div>
+            <span className="sec-note lbl">Now hiring drivers<br />Drive when you want</span>
+          </div>
+          <div className="drive-grid rv">
+            <div>
+              <p className="drive-lede">Know the city like your own pocket? Clean license, patient with morning traffic, and you'd rather get paid than guess what a ride pays? Dispatch wants your number.</p>
+              <ul className="drive-points">
+                <li>Pick your trips, keep your days free</li>
+                <li>Flat fare per run — no surge math</li>
+                <li>Weekly payouts, cash or bank</li>
+                <li>24 / 7 dispatch backing every route</li>
+              </ul>
+            </div>
+            <div>
+              <Magnet><Link to="/apply" className="drive-cta">Apply to drive →</Link></Magnet>
+              <span className="drive-note">5-minute application · valid license required · reviewed by dispatch within 24 h</span>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer id="contact">
