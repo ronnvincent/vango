@@ -40,66 +40,32 @@ async function audit(label, url, { deepLink = false } = {}) {
   console.log(`viewport=${scan.innerWidth} docScrollW=${scan.scrollWidth} clientW=${scan.clientWidth} bodyScrollW=${scan.bodyScrollWidth} => HORIZONTAL OVERFLOW: ${scan.scrollWidth > scan.clientWidth ? "YES" : "no"}`);
   scan.offenders.forEach(o => console.log("  OFFENDER:", o));
 
-  // Fleet interaction
+  // Fleet interaction: select button sets van + scrolls to booking form
   await page.evaluate(() => document.querySelector("#fleet")?.scrollIntoView());
   await new Promise(r => setTimeout(r, 900));
   const rows = await page.evaluate(() =>
     [...document.querySelectorAll(".fleet-row")].map(el => ({
-      name: el.querySelector(".f-name")?.childNodes[0]?.textContent?.trim(),
+      name: el.querySelector("h3")?.textContent?.trim(),
       opacity: getComputedStyle(el).opacity,
       h: Math.round(el.getBoundingClientRect().height),
-      top: Math.round(el.getBoundingClientRect().top),
     }))
   );
   console.log("FLEET ROWS:", JSON.stringify(rows));
 
-  await page.evaluate(() => document.querySelector(".fleet-main")?.scrollIntoView({ block: "center" }));
+  await page.evaluate(() => document.querySelector(".fleet-row .btn")?.scrollIntoView({ block: "center" }));
   await new Promise(r => setTimeout(r, 400));
-  await page.tap(".fleet-main");
-  await new Promise(r => setTimeout(r, 600));
-  // REGRESSION GUARD: tapping re-renders the list — the tapped row and its
-  // siblings must STILL be visible (opacity 1), not wiped back to hidden.
-  const post = await page.evaluate(() =>
-    [...document.querySelectorAll(".fleet-row")].map(el => ({
-      cls: el.className.trim(),
+  await page.tap(".fleet-row .btn");
+  await new Promise(r => setTimeout(r, 800));
+  const post = await page.evaluate(() => ({
+    rows: [...document.querySelectorAll(".fleet-row")].map(el => ({
       opacity: getComputedStyle(el).opacity,
-      detail: el.querySelector(".fd-body") ? "OPEN" : "closed",
-    }))
-  );
-  console.log("ROWS AFTER TAP (opacity must stay 1):", JSON.stringify(post));
-  const wiped = post.some(r => Number(r.opacity) < 1);
-  console.log(wiped ? "!!! REGRESSION: re-render wiped reveal class" : "reveal survives re-render: OK");
-  await new Promise(r => setTimeout(r, 400));
-  let detail = await page.evaluate(() => {
-    const d = document.querySelector(".fd-body");
-    if (!d) return { exists: false };
-    const r = d.getBoundingClientRect();
-    return { exists: true, w: Math.round(r.width), h: Math.round(r.height), opacity: getComputedStyle(d).opacity, color: getComputedStyle(d).color, bg: getComputedStyle(d).backgroundColor, overflow: getComputedStyle(d).overflow, text: d.textContent.trim().slice(0, 50) };
-  });
-  console.log("FLEET DETAIL AFTER TOUCH-TAP:", JSON.stringify(detail));
-
-  // retry with a plain mouse click
-  await page.click(".fleet-main");
-  await new Promise(r => setTimeout(r, 400));
-  detail = await page.evaluate(() => {
-    const d = document.querySelector(".fd-body");
-    const btn = document.querySelector(".fleet-main");
-    return { exists: !!d, ariaExpanded: btn?.getAttribute("aria-expanded"), text: d ? d.textContent.trim().slice(0, 40) : null };
-  });
-  console.log("FLEET DETAIL AFTER MOUSE CLICK:", JSON.stringify(detail));
-
-  // retry bypassing hit-testing entirely
-  await page.evaluate(() => {
-    const rows = document.querySelectorAll(".fleet-row");
-    rows[2].querySelector(".fleet-main").click();
-  });
-  await new Promise(r => setTimeout(r, 400));
-  detail = await page.evaluate(() => {
-    const bodies = document.querySelectorAll(".fd-body");
-    const open = [...document.querySelectorAll(".fleet-row")].map(el => el.className);
-    return { count: bodies.length, rows: open, lastText: bodies[bodies.length - 1]?.textContent.trim().slice(0, 40) };
-  });
-  console.log("AFTER JS .click() ON ROW 3:", JSON.stringify(detail));
+    })),
+    vanChecked: document.querySelector(".van-pick input:checked")?.value || null,
+    scrollW: document.documentElement.scrollWidth,
+  }));
+  console.log("AFTER SELECT (opacity must stay 1):", JSON.stringify(post));
+  const wiped = post.rows.some(r => Number(r.opacity) < 1);
+  console.log(wiped ? "!!! REGRESSION: reveal wiped" : "reveal survives select: OK");
 }
 
 await audit("normal load", BASE + "/");
