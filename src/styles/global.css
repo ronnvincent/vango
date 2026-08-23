@@ -80,7 +80,7 @@ h2{font-family:'Archivo Black';text-transform:uppercase;letter-spacing:-.01em;li
 .table td{padding:.7rem .8rem;border-bottom:1px solid var(--hair);vertical-align:middle}
 .table tr:hover td{background:rgba(23,21,18,.04)}
 .empty{border:1.5px dashed var(--line);padding:3rem 1.5rem;text-align:center;color:rgba(23,21,18,.55);font-family:'IBM Plex Mono';font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
-.signout-btn{padding:0.5rem}}
+
 
 /* LANDING PAGE EXTENSIONS */
 .ticker{background:var(--ink);color:var(--paper);overflow:hidden;padding:.55rem 0}
@@ -250,3 +250,4 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
   .mobile-close-btn{display:flex;align-items:center;background:transparent;border:none;cursor:pointer;padding:0;color:var(--ink)}
   .topbar{justify-content:flex-start}
 }
+
