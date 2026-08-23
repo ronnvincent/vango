@@ -112,7 +112,7 @@ insert into locations(name, short_name) values
  ('Grand Stadium','Stadium'),('Riverside Tech Park','Tech Park');
 
 insert into distances(from_id,to_id,km)
-select a.id,b.id,d.km from (values
+select a.id,b.id,p.km from (values
  ('City Center','Airport',28),('City Center','N. Station',42),('City Center','Harbor',12),('City Center','Stadium',9),('City Center','Tech Park',17),
  ('Airport','N. Station',51),('Airport','Harbor',31),('Airport','Stadium',26),('Airport','Tech Park',35),
  ('N. Station','Harbor',47),('N. Station','Stadium',50),('N. Station','Tech Park',58),
@@ -121,7 +121,7 @@ select a.id,b.id,d.km from (values
 ) as p(a,b,km)
 join locations a on a.short_name = p.a join locations b on b.short_name = p.b
 union all
-select b.id,a.id,d.km from (values
+select b.id,a.id,q.km from (values
  ('City Center','Airport',28),('City Center','N. Station',42),('City Center','Harbor',12),('City Center','Stadium',9),('City Center','Tech Park',17),
  ('Airport','N. Station',51),('Airport','Harbor',31),('Airport','Stadium',26),('Airport','Tech Park',35),
  ('N. Station','Harbor',47),('N. Station','Stadium',50),('N. Station','Tech Park',58),
