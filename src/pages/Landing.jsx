@@ -239,7 +239,7 @@ export default function Landing() {
 
       <header className="nav">
         <div className="wrap nav-in">
-          <a href="#top" className="wordmark">VAN<i>—</i>GO<sup style={{ fontFamily: "'IBM Plex Mono'", fontSize: "0.5em" }}>®</sup></a>
+          <a href="#top" className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></a>
           <nav aria-label="Main">
             <ul className="nav-links">
               <li><a href="#fleet"><sup>01</sup>Fleet</a></li>
@@ -509,3 +509,4 @@ export default function Landing() {
     </>
   );
 }
+

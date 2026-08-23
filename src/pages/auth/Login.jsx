@@ -24,7 +24,7 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <Link to="/" className="wordmark">VAN<i>—</i>GO</Link>
+        <Link to="/" className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></Link>
         <div className="panel">
           <form onSubmit={handleSubmit}>
             <div className="sec-head" style={{ marginTop: 0 }}>

@@ -37,7 +37,7 @@ export default function DashLayout({ role }) {
   return (
     <div className="shell">
       <aside className="side">
-        <div className="wordmark">VAN<i>—</i>GO</div>
+        <div className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></div>
         <nav style={{ display: "flex", flexDirection: "column", gap: "0.25rem", flex: 1 }}>
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => (isActive ? "active" : "")} end={to === "/app" || to === "/driver" || to === "/admin"}>

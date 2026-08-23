@@ -15,7 +15,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn{display:inline-block;font-family:'IBM Plex Mono';font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);padding:.75rem 1.4rem;transition:.2s;font-weight:500}
 .btn-solid{background:var(--ink);color:var(--paper)}
 .btn:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
-.wordmark{font-family:'Archivo Black','Arial Black',sans-serif;font-size:1.35rem;letter-spacing:-.02em}
+.wordmark{display:inline-block;height:48px;width:auto}.wordmark img{height:100%;width:auto;object-fit:contain}
 .wordmark i{font-style:normal;color:var(--accent)}
 h1{font-family:'Archivo Black','Arial Black',sans-serif;line-height:.94;letter-spacing:-.015em;text-transform:uppercase}
 h1 .serif,h2 .serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;text-transform:none;font-weight:400;color:var(--accent);letter-spacing:0}
@@ -227,3 +227,4 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 .kpi-card .lbl{margin-bottom:.5rem;display:block}
 .inline-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1rem}
 .section-title{font-family:'Archivo Black';font-size:1.2rem;text-transform:uppercase;letter-spacing:-.01em;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--ink)}
+

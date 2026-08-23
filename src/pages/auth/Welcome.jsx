@@ -4,7 +4,7 @@ export default function Welcome() {
   return (
     <div className="auth-page">
       <div className="auth-card" style={{ maxWidth: "540px" }}>
-        <Link to="/" className="wordmark" style={{ marginBottom: "1.5rem" }}>VAN<i>—</i>GO</Link>
+        <Link to="/" className="wordmark" style={{ marginBottom: "1.5rem" }}><img src="/logo.png" alt="VanGo Logo" /></Link>
         <div className="panel" style={{ textAlign: "center", padding: "3.5rem 2rem" }}>
           <div className="badge badge-confirmed" style={{ margin: "0 auto 1.5rem", width: "max-content", padding: "0.5rem 1rem", fontSize: "0.85rem" }}>
             EMAIL CONFIRMED

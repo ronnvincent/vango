@@ -24,7 +24,7 @@ export default function SignUp() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <Link to="/" className="wordmark">VAN<i>—</i>GO</Link>
+        <Link to="/" className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></Link>
         <div className="panel">
           {success ? (
             <div className="auth-success">
