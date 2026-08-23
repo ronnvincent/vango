@@ -11,6 +11,7 @@ body::after{content:"";position:fixed;inset:0;z-index:999;pointer-events:none;op
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .wrap{width:min(1240px,92vw);margin-inline:auto}
+#root{position:relative}
 .lbl{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.85rem;letter-spacing:.05em}
 .btn{display:inline-block;font-family:'IBM Plex Mono';font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);padding:.75rem 1.4rem;transition:.2s;font-weight:500}
 .btn-solid{background:var(--ink);color:var(--paper)}
@@ -213,10 +214,10 @@ h2{font-family:'Archivo Black';text-transform:uppercase;letter-spacing:-.01em;li
 .proc-row h3{font-family:'Archivo Black';text-transform:uppercase;font-size:1.05rem;letter-spacing:.01em}
 .proc-row p{color:rgba(23,21,18,.8);font-size:1rem;max-width:38rem}
 .manifest{display:grid;grid-template-columns:1fr 420px;gap:4vw;margin-top:2.5rem;align-items:start}
-.van-pick{display:flex;border:1.5px solid var(--ink)}
+.van-pick{position:relative;display:flex;border:1.5px solid var(--ink)}
 .van-pick label{flex:1;text-align:center;padding:.9rem .4rem;font-family:'IBM Plex Mono';font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border-right:1.5px solid var(--ink);transition:.15s}
 .van-pick label:last-of-type{border-right:none}
-.van-pick input{position:absolute;opacity:0;pointer-events:none}
+.van-pick input{position:absolute;width:1px;height:1px;margin:-1px;opacity:0;pointer-events:none}
 .van-pick input:checked+label{background:var(--ink);color:var(--paper)}
 .van-pick input:focus-visible+label{outline:2px solid var(--accent);outline-offset:-2px}
 @media(hover:hover){.van-pick label:hover{background:rgba(23,21,18,.07)}}
