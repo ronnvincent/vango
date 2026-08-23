@@ -12,6 +12,16 @@ export default function CustomerHome() {
   const [bookings, setBookings] = useState([]);
   const [filter, setFilter] = useState("UPCOMING");
   const [loading, setLoading] = useState(true);
+  const [driverApp, setDriverApp] = useState(null);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    supabase.from("driver_applications")
+      .select("status")
+      .eq("applicant", session.user.id)
+      .maybeSingle()
+      .then(({ data }) => setDriverApp(data));
+  }, [session?.user?.id]);
 
   useEffect(() => {
     supabase.from("bookings").select(`
@@ -35,6 +45,24 @@ export default function CustomerHome() {
 
   return (
     <>
+      {!driverApp && (
+        <div className="cta-banner">
+          <div>
+            <b>Like driving more than riding?</b>
+            <span className="lbl"> Apply to become a VanGo driver — dispatch reviews every application.</span>
+          </div>
+          <button className="btn" onClick={() => navigate("/apply")}>APPLY TO DRIVE</button>
+        </div>
+      )}
+      {driverApp?.status === "pending" && (
+        <div className="cta-banner">
+          <div>
+            <b>Driver application under review.</b>
+            <span className="lbl"> Dispatch usually responds within 24 hours.</span>
+          </div>
+          <button className="btn" onClick={() => navigate("/app/application")}>VIEW STATUS</button>
+        </div>
+      )}
       <div className="filter-chips">
         {[["ALL", "All Trips"], ["UPCOMING", "Upcoming"], ["PAST", "Past"], ["CANCELLED", "Cancelled"]].map(([f, label]) => (
           <button key={f} className={`chip ${filter === f ? "active" : ""}`} onClick={() => setFilter(f)}>

@@ -236,6 +236,7 @@ export default function Landing() {
               <li><a href="#rates"><sup>02</sup>Rates</a></li>
               <li><a href="#manifest"><sup>03</sup>Manifest</a></li>
               <li><a href="#contact"><sup>04</sup>Contact</a></li>
+              <li><Link to="/apply"><sup>05</sup>Drive</Link></li>
             </ul>
           </nav>
           <Link className="btn btn-solid" to="/signup">Book a van →</Link>
@@ -251,6 +252,7 @@ export default function Landing() {
         <a href="#rates" onClick={navLinkClick}>Rates</a>
         <a href="#manifest" onClick={navLinkClick}>Manifest</a>
         <a href="#contact" onClick={navLinkClick}>Contact</a>
+        <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
       </div>
 
       <main id="top">

@@ -20,6 +20,12 @@ export function AuthProvider({ children }){
     supabase.auth.signUp({email,password,options:{data:{full_name:fullName,phone},emailRedirectTo: `${window.location.origin}/welcome`}});
   const signIn  = ({email,password}) => supabase.auth.signInWithPassword({email,password});
   const signOut = () => supabase.auth.signOut();
-  return <Ctx.Provider value={{session,profile,loading,signUp,signIn,signOut}}>{children}</Ctx.Provider>;
+  const reloadProfile = () => {
+    if (!session) return Promise.resolve();
+    setLoading(true);
+    return supabase.from("profiles").select("*").eq("id", session.user.id).single()
+      .then(({data}) => { setProfile(data); setLoading(false); });
+  };
+  return <Ctx.Provider value={{session,profile,loading,signUp,signIn,signOut,reloadProfile}}>{children}</Ctx.Provider>;
 }
 export const useAuth = () => useContext(Ctx);

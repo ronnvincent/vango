@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { LogOut, Home, User, Plus, Truck, Users, LayoutDashboard, Settings, BarChart, Menu, X } from "lucide-react";
+import { LogOut, Home, User, Plus, Truck, Users, LayoutDashboard, Settings, BarChart, Menu, X, FileText } from "lucide-react";
 
 export default function DashLayout({ role }) {
   const { profile, signOut } = useAuth();
@@ -30,6 +30,7 @@ export default function DashLayout({ role }) {
     admin: [
       { to: "/admin", label: "Overview", icon: LayoutDashboard },
       { to: "/admin/bookings", label: "Bookings", icon: Home },
+      { to: "/admin/applications", label: "Applications", icon: FileText },
       { to: "/admin/fleet", label: "Fleet", icon: Truck },
       { to: "/admin/drivers", label: "Drivers", icon: User },
       { to: "/admin/customers", label: "Customers", icon: Users },

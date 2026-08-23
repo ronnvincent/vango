@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth, homeFor } from "../../hooks/useAuth";
+import { completePendingApplication } from "../../lib/driverApplication";
 
 const friendlyAuthError = m =>
   m?.includes("Invalid login credentials") ? "Wrong email or password."
@@ -22,8 +23,9 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const { error } = await signIn({ email: email.trim(), password });
+    const { data, error } = await signIn({ email: email.trim(), password });
     if (error) setError(friendlyAuthError(error.message));
+    else await completePendingApplication(data.session);
     setLoading(false);
   };
 
@@ -53,6 +55,7 @@ export default function Login() {
             </button>
           </form>
           <Link to="/signup" className="auth-link">Don't have an account? Sign up</Link>
+          <Link to="/apply" className="auth-link" style={{ color: "var(--accent)" }}>Want to drive with us? Apply here</Link>
           <p className="lbl help-line">Trouble signing in? Call dispatch — <a href="tel:+15550000000">+1 (555) 000-0000</a>.</p>
         </div>
       </div>

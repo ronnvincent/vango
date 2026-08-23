@@ -6,11 +6,13 @@ import Landing from "./pages/Landing";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import Welcome from "./pages/auth/Welcome";
+import DriverApply from "./pages/auth/DriverApply";
 
 import CustomerHome from "./pages/customer/CustomerHome";
 import NewBooking from "./pages/customer/NewBooking";
 import BookingDetail from "./pages/customer/BookingDetail";
 import Profile from "./pages/customer/Profile";
+import ApplicationStatus from "./pages/customer/ApplicationStatus";
 
 import DriverHome from "./pages/driver/DriverHome";
 import TripDetail from "./pages/driver/TripDetail";
@@ -18,6 +20,7 @@ import TripDetail from "./pages/driver/TripDetail";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminBookingDetail from "./pages/admin/AdminBookingDetail";
+import AdminApplications from "./pages/admin/AdminApplications";
 import AdminFleet from "./pages/admin/AdminFleet";
 import AdminDrivers from "./pages/admin/AdminDrivers";
 import AdminCustomers from "./pages/admin/AdminCustomers";
@@ -30,6 +33,7 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/apply" element={<DriverApply />} />
       <Route path="/welcome" element={<Welcome />} />
 
       {/* Customer */}
@@ -38,6 +42,7 @@ export default function App() {
         <Route path="book/new" element={<NewBooking />} />
         <Route path="bookings/:id" element={<BookingDetail />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="application" element={<ApplicationStatus />} />
       </Route>
 
       {/* Driver */}
@@ -51,6 +56,7 @@ export default function App() {
         <Route index element={<AdminOverview />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="bookings/:id" element={<AdminBookingDetail />} />
+        <Route path="applications" element={<AdminApplications />} />
         <Route path="fleet" element={<AdminFleet />} />
         <Route path="drivers" element={<AdminDrivers />} />
         <Route path="customers" element={<AdminCustomers />} />
