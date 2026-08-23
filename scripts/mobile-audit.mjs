@@ -56,6 +56,19 @@ async function audit(label, url, { deepLink = false } = {}) {
   await page.evaluate(() => document.querySelector(".fleet-main")?.scrollIntoView({ block: "center" }));
   await new Promise(r => setTimeout(r, 400));
   await page.tap(".fleet-main");
+  await new Promise(r => setTimeout(r, 600));
+  // REGRESSION GUARD: tapping re-renders the list — the tapped row and its
+  // siblings must STILL be visible (opacity 1), not wiped back to hidden.
+  const post = await page.evaluate(() =>
+    [...document.querySelectorAll(".fleet-row")].map(el => ({
+      cls: el.className.trim(),
+      opacity: getComputedStyle(el).opacity,
+      detail: el.querySelector(".fd-body") ? "OPEN" : "closed",
+    }))
+  );
+  console.log("ROWS AFTER TAP (opacity must stay 1):", JSON.stringify(post));
+  const wiped = post.some(r => Number(r.opacity) < 1);
+  console.log(wiped ? "!!! REGRESSION: re-render wiped reveal class" : "reveal survives re-render: OK");
   await new Promise(r => setTimeout(r, 400));
   let detail = await page.evaluate(() => {
     const d = document.querySelector(".fd-body");

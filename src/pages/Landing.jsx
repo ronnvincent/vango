@@ -334,24 +334,26 @@ export default function Landing() {
               { id: 'cruiser', no: '02', name: 'Cruiser Twelve', sub: 'The workhorse. Most-booked van on the road.', pax: '12 pax', rate: '$1.50/km', status: '3 left today', low: true, desc: 'Full-size window van. Wedding parties, sports teams, conference shuttles. Dual A/C, onboard entertainment, tow hitch on request.', specs: ['12 seats','8 large bags','Dual A/C','Entertainment'] },
               { id: 'mover', no: '03', name: 'Mover Nineteen', sub: 'Max capacity. Crews, cargo, or both.', pax: '19 pax', rate: '$2.00/km', status: 'Available', desc: 'Minibus platform with cargo partition option. Moves nineteen people — or twelve people and five hundred kilos of equipment.', specs: ['19 seats','500 kg cargo','Climate ctrl','PA system'] }
             ].map(f => (
-              <div key={f.id} className={`fleet-row rv ${openFleet === f.id ? 'open' : ''}`}>
-                <button className="fleet-main" aria-expanded={openFleet === f.id} onClick={() => setOpenFleet(openFleet === f.id ? null : f.id)} onMouseMove={e => handleSpotlight(e, e.currentTarget)}>
-                  <span className="f-no">/{f.no}</span>
-                  <span className="f-name">{f.name}<small>{f.sub}</small></span>
-                  <span className="f-col">{f.pax}</span>
-                  <span className="f-col f-rate">{f.rate}</span>
-                  <span className="f-col f-status"><span className={`status ${f.low ? 'low' : ''}`}>{f.status}</span></span>
-                  <span className="f-plus">+</span>
-                </button>
-                {openFleet === f.id && (
-                  <div className="fd-body">
-                    <div>
-                      <p className="fd-desc">{f.desc}</p>
-                      <p className="fd-specs">{f.specs.map((s,i) => <span key={i}>{s}</span>)}</p>
+              <div key={f.id} className="rv">
+                <div className={`fleet-row ${openFleet === f.id ? 'open' : ''}`}>
+                  <button className="fleet-main" aria-expanded={openFleet === f.id} onClick={() => setOpenFleet(openFleet === f.id ? null : f.id)} onMouseMove={e => handleSpotlight(e, e.currentTarget)}>
+                    <span className="f-no">/{f.no}</span>
+                    <span className="f-name">{f.name}<small>{f.sub}</small></span>
+                    <span className="f-col">{f.pax}</span>
+                    <span className="f-col f-rate">{f.rate}</span>
+                    <span className="f-col f-status"><span className={`status ${f.low ? 'low' : ''}`}>{f.status}</span></span>
+                    <span className="f-plus">+</span>
+                  </button>
+                  {openFleet === f.id && (
+                    <div className="fd-body">
+                      <div>
+                        <p className="fd-desc">{f.desc}</p>
+                        <p className="fd-specs">{f.specs.map((s,i) => <span key={i}>{s}</span>)}</p>
+                      </div>
+                      <button className="btn btn-solid" onClick={() => { setVClass(f.id); document.getElementById('manifest').scrollIntoView({behavior:'smooth'}); }}>Select →</button>
                     </div>
-                    <button className="btn btn-solid" onClick={() => { setVClass(f.id); document.getElementById('manifest').scrollIntoView({behavior:'smooth'}); }}>Select →</button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             ))}
           </div>
