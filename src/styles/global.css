@@ -11,8 +11,8 @@ body::after{content:"";position:fixed;inset:0;z-index:999;pointer-events:none;op
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .wrap{width:min(1240px,92vw);margin-inline:auto}
-.lbl{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
-.btn{display:inline-block;font-family:'IBM Plex Mono';font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);padding:.65rem 1.3rem;transition:.2s}
+.lbl{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.85rem;letter-spacing:.05em}
+.btn{display:inline-block;font-family:'IBM Plex Mono';font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);padding:.75rem 1.4rem;transition:.2s;font-weight:500}
 .btn-solid{background:var(--ink);color:var(--paper)}
 .btn:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
 .wordmark{font-family:'Archivo Black','Arial Black',sans-serif;font-size:1.35rem;letter-spacing:-.02em}
@@ -23,7 +23,7 @@ h2{font-family:'Archivo Black';text-transform:uppercase;letter-spacing:-.01em;li
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:2px solid var(--ink)}
 .sec-head .idx{font-family:'IBM Plex Mono';font-size:.8rem;color:var(--accent);display:block;margin-bottom:.5rem}
 .field{margin-bottom:1.6rem}
-.field label{display:block;font-family:'IBM Plex Mono';font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:rgba(23,21,18,.6);margin-bottom:.5rem}
+.field label{display:block;font-family:'IBM Plex Mono';font-size:.85rem;letter-spacing:.05em;color:rgba(23,21,18,.8);margin-bottom:.5rem;font-weight:500}
 .field input,.field select,.field textarea{width:100%;background:transparent;border:none;border-bottom:1.5px solid var(--ink);font-family:'IBM Plex Mono';font-size:1rem;padding:.55rem 0;color:var(--ink);border-radius:0}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--accent)}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
@@ -124,7 +124,7 @@ body.nav-open .m-menu{transform:none}
 .landing-section{scroll-margin-top:76px}
 .sec-head{margin-top:5.5rem}
 .sec-head h2{font-size:clamp(1.8rem,4vw,3rem)}
-.sec-note{color:rgba(23,21,18,.6);text-align:right}
+.sec-note{color:rgba(23,21,18,.75);text-align:right}
 .fleet-row{border-bottom:1px solid var(--line)}
 .fleet-main{width:100%;display:grid;grid-template-columns:70px 1fr 110px 130px 150px 50px;align-items:center;gap:1rem;padding:1.5rem 0;text-align:left;transition:.2s;position:relative}
 .fleet-main:hover{background:var(--ink);color:var(--paper);padding-left:1rem;padding-right:1rem}

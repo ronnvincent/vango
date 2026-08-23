@@ -88,17 +88,18 @@ export default function NewBooking() {
 
   return (
     <form className="manifest" onSubmit={handleSubmit}>
+      <div className="panel" style={{marginBottom: "2rem", background: "var(--ink)", color: "var(--paper)"}}><b>Note:</b> VanGo operates between fixed city terminals. Select your origin and destination below.</div>
       <div>
         <div className="duo">
           <div className="field">
-            <label>From</label>
+            <label>Departure Terminal</label>
             <select value={from} onChange={e => setFrom(e.target.value)} required>
               <option value="" disabled>Select pickup</option>
               {locs.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
           </div>
           <div className="field">
-            <label>To</label>
+            <label>Arrival Terminal</label>
             <select value={to} onChange={e => setTo(e.target.value)} required>
               <option value="" disabled>Select dropoff</option>
               {locs.map(l => <option key={l.id} value={l.id} disabled={l.id == from}>{l.name}</option>)}

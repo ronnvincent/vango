@@ -379,13 +379,13 @@ export default function Landing() {
             <div>
               <div className="duo">
                 <div className="field">
-                  <label>From</label>
+                  <label>Departure Terminal</label>
                   <select value={from} onChange={e => setFrom(e.target.value)}>
                     {SHORT.map((s, i) => <option key={i} value={i}>{s}</option>)}
                   </select>
                 </div>
                 <div className="field">
-                  <label>To</label>
+                  <label>Arrival Terminal</label>
                   <select value={to} onChange={e => setTo(e.target.value)}>
                     {SHORT.map((s, i) => <option key={i} value={i} disabled={i == from}>{s}</option>)}
                   </select>
@@ -446,7 +446,7 @@ export default function Landing() {
               </div>
               <div className="tk-stub">
                 <div className="barcode" aria-hidden="true" />
-                <Link to="/signup" className="btn issue-btn" style={{ display: 'block', textAlign: 'center' }}>CONTINUE TO BOOK</Link>
+                <Link to="/signup" className="btn issue-btn" style={{ display: 'block', textAlign: 'center' }}>CREATE ACCOUNT TO BOOK</Link>
               </div>
             </aside>
           </form>
