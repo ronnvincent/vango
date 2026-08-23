@@ -267,6 +267,12 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 .auth-error{font-family:'IBM Plex Mono';font-size:.75rem;color:var(--accent);letter-spacing:.04em;margin-bottom:1rem}
 .auth-link{display:block;text-align:center;margin-top:1.4rem;font-family:'IBM Plex Mono';font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
 .auth-link:hover{color:var(--accent)}
+.auth-divider{display:flex;align-items:center;gap:.8rem;margin:1.4rem 0 1rem;color:rgba(23,21,18,.5);font-family:'IBM Plex Mono';font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.btn-google{display:flex;width:100%;align-items:center;justify-content:center;gap:.7rem;background:#fff;border:1.5px solid var(--ink);padding:.85rem;font-family:'IBM Plex Mono';font-size:.88rem;letter-spacing:.04em;transition:border-color .15s;cursor:pointer}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
+@media(hover:hover){.btn-google:hover:not(:disabled){border-color:var(--accent)}}
+.btn-google:disabled{opacity:.6;cursor:wait}
 .auth-success{font-family:'IBM Plex Mono';font-size:.8rem;color:var(--ok);letter-spacing:.04em;text-align:center;padding:2rem 1rem}
 
 /* CUSTOMER/DRIVER/ADMIN EXTRAS */

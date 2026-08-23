@@ -1,6 +1,8 @@
 ﻿import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { supabase } from "../../lib/supabaseClient";
 import { useAuth, homeFor } from "../../hooks/useAuth";
+import GoogleG from "../../components/GoogleG";
 
 const friendlyAuthError = m =>
   m?.includes("already registered") ? "That email already has an account — sign in instead."
@@ -14,8 +16,24 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   if (session && profile) return <Navigate to={homeFor(profile.role)} replace />;
+
+  const handleGoogle = async () => {
+    setError("");
+    setGoogleLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      setError(error.message.includes("Provider") || error.message.includes("provider")
+        ? "Google sign-in isn't enabled yet — ask the site admin to enable it in Supabase."
+        : friendlyAuthError(error.message));
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +82,11 @@ export default function SignUp() {
               </div>
               <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
                 {loading ? "Creating Account…" : "Sign Up →"}
+              </button>
+              <div className="auth-divider">or</div>
+              <button type="button" className="btn-google" onClick={handleGoogle} disabled={loading || googleLoading}>
+                <GoogleG />
+                <span>{googleLoading ? "Redirecting to Google…" : "Sign up with Google"}</span>
               </button>
             </form>
           )}

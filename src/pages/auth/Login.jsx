@@ -1,7 +1,9 @@
 ﻿import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { supabase } from "../../lib/supabaseClient";
 import { useAuth, homeFor } from "../../hooks/useAuth";
 import { completePendingApplication } from "../../lib/driverApplication";
+import GoogleG from "../../components/GoogleG";
 
 const friendlyAuthError = m =>
   m?.includes("Invalid login credentials") ? "Wrong email or password."
@@ -16,6 +18,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   if (session && profile) return <Navigate to={homeFor(profile.role)} replace />;
 
@@ -27,6 +30,22 @@ export default function Login() {
     if (error) setError(friendlyAuthError(error.message));
     else await completePendingApplication(data.session);
     setLoading(false);
+  };
+
+  const handleGoogle = async () => {
+    setError("");
+    setGoogleLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      setError(error.message.includes("Provider") || error.message.includes("provider")
+        ? "Google sign-in isn't enabled yet — ask the site admin to enable it in Supabase."
+        : friendlyAuthError(error.message));
+      setGoogleLoading(false);
+    }
+    // on success the browser redirects to Google, then back here
   };
 
   return (
@@ -52,6 +71,11 @@ export default function Login() {
             </div>
             <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
               {loading ? "Authenticating…" : "Sign In →"}
+            </button>
+            <div className="auth-divider">or</div>
+            <button type="button" className="btn-google" onClick={handleGoogle} disabled={loading || googleLoading}>
+              <GoogleG />
+              <span>{googleLoading ? "Redirecting to Google…" : "Continue with Google"}</span>
             </button>
           </form>
           <Link to="/signup" className="auth-link">Don't have an account? Sign up</Link>
