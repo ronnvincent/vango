@@ -206,11 +206,6 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle("nav-open", navOpen);
-    return () => document.body.classList.remove("nav-open");
-  }, [navOpen]);
-
-  useEffect(() => {
     const onKey = e => { if (e.key === "Escape") setNavOpen(false); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -253,29 +248,23 @@ export default function Landing() {
             </ul>
           </nav>
           <Link className="btn btn-solid" to="/signup">Book a van →</Link>
-          <button className="burger" onClick={() => setNavOpen(true)} aria-label="Open menu">
-            <span /><span /><span />
+          <button className="burger" onClick={() => setNavOpen(v => !v)} aria-label={navOpen ? "Close menu" : "Open menu"} aria-expanded={navOpen}>
+            {navOpen ? <X size={20} /> : <><span /><span /><span /></>}
           </button>
         </div>
+        {navOpen && (
+          <div className="wrap">
+            <nav className="m-drop" aria-label="Mobile menu">
+              <a href="#fleet" onClick={navLinkClick}>Fleet</a>
+              <a href="#rates" onClick={navLinkClick}>Rates</a>
+              <a href="#manifest" onClick={navLinkClick}>Manifest</a>
+              <a href="#contact" onClick={navLinkClick}>Contact</a>
+              <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
+              <Link className="btn btn-solid m-book" to="/signup">Book a van</Link>
+            </nav>
+          </div>
+        )}
       </header>
-
-      <div className="m-menu" role="dialog" aria-modal="true" aria-label="Menu">
-        <div className="m-head">
-          <Link to="/" onClick={navLinkClick}><img src="/logo.png" alt="VanGo Logo" /></Link>
-          <button className="m-close" onClick={() => setNavOpen(false)} aria-label="Close menu"><X size={28} /></button>
-        </div>
-        <nav aria-label="Mobile" className="m-links">
-          <a href="#fleet" onClick={navLinkClick}>Fleet</a>
-          <a href="#rates" onClick={navLinkClick}>Rates</a>
-          <a href="#manifest" onClick={navLinkClick}>Manifest</a>
-          <a href="#contact" onClick={navLinkClick}>Contact</a>
-          <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
-        </nav>
-        <div className="m-foot">
-          <Link className="btn btn-solid m-cta" to="/signup">Book a van</Link>
-          <button className="btn m-cta" onClick={() => { setNavOpen(false); window.scrollTo({ top: 0 }); }}>Back to top ↑</button>
-        </div>
-      </div>
 
       <main id="top">
         <div className="hero wrap">
