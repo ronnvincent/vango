@@ -13,6 +13,16 @@ export default function DashLayout({ role }) {
     setMenuOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    document.body.classList.toggle("drawer-lock", menuOpen);
+    const onKey = e => { if (e.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.classList.remove("drawer-lock");
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
@@ -48,7 +58,7 @@ export default function DashLayout({ role }) {
       <aside className={`side ${menuOpen ? 'open' : ''}`}>
         <div className="wordmark side-head">
           <img src="/logo.png" alt="VanGo Logo" />
-          <button className="mobile-close-btn" onClick={() => setMenuOpen(false)}><X size={24} /></button>
+          <button className="mobile-close-btn" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={26} /></button>
         </div>
         <nav className="side-nav">
           {links.map(({ to, label, icon: Icon }) => (
@@ -70,7 +80,7 @@ export default function DashLayout({ role }) {
       </aside>
       <main className="main">
         <header className="topbar">
-          <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)}>
+          <button className="mobile-menu-btn" onClick={() => setMenuOpen(true)} aria-label="Open menu" aria-expanded={menuOpen}>
             <Menu size={24} />
           </button>
           <div className="lbl topbar-title">{role.toUpperCase()} DISPATCH</div>

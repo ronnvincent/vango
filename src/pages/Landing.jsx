@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
+import { X } from "lucide-react";
 
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -210,6 +211,12 @@ export default function Landing() {
   }, [navOpen]);
 
   useEffect(() => {
+    const onKey = e => { if (e.key === "Escape") setNavOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
     const io = new IntersectionObserver(es => es.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
     }), { threshold: 0.12 });
@@ -246,13 +253,22 @@ export default function Landing() {
         </div>
       </header>
 
-      <div className="m-menu">
-        <button className="m-close" onClick={() => setNavOpen(false)}>[ CLOSE ]</button>
-        <a href="#fleet" onClick={navLinkClick}>Fleet</a>
-        <a href="#rates" onClick={navLinkClick}>Rates</a>
-        <a href="#manifest" onClick={navLinkClick}>Manifest</a>
-        <a href="#contact" onClick={navLinkClick}>Contact</a>
-        <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
+      <div className="m-menu" role="dialog" aria-modal="true" aria-label="Menu">
+        <div className="wrap m-head">
+          <Link to="/" onClick={navLinkClick}><img src="/logo.png" alt="VanGo Logo" /></Link>
+          <button className="m-close" onClick={() => setNavOpen(false)} aria-label="Close menu"><X size={28} /></button>
+        </div>
+        <nav aria-label="Mobile" className="m-links">
+          <a href="#fleet" onClick={navLinkClick}>Fleet</a>
+          <a href="#rates" onClick={navLinkClick}>Rates</a>
+          <a href="#manifest" onClick={navLinkClick}>Manifest</a>
+          <a href="#contact" onClick={navLinkClick}>Contact</a>
+          <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
+        </nav>
+        <div className="wrap m-foot">
+          <Link className="btn btn-solid m-cta" to="/signup">Book a van</Link>
+          <button className="btn m-cta" onClick={() => { setNavOpen(false); window.scrollTo({ top: 0 }); }}>Back to top ↑</button>
+        </div>
       </div>
 
       <main id="top">
