@@ -1,12 +1,15 @@
 ﻿import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { TableSkeleton } from "../../components/Skeleton";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import { toast } from "../../components/Toast";
 
 export default function AdminDrivers() {
   const [drivers, setDrivers] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [promoteTarget, setPromoteTarget] = useState(null);
+  const [busy, setBusy] = useState(false);
 
   const load = () => {
     Promise.all([
@@ -24,13 +27,18 @@ export default function AdminDrivers() {
   useEffect(load, []);
 
   const toggleDuty = async (id, current) => {
-    await supabase.from("profiles").update({ on_duty: !current }).eq("id", id);
+    const { error } = await supabase.rpc("admin_set_duty", { target: id, duty: !current });
+    if (error) return toast("Sorry, couldn't update duty status. Try again.");
     load();
   };
 
-  const promote = async (id) => {
-    if (!confirm("Promote this customer to Driver?")) return;
-    await supabase.from("profiles").update({ role: "driver" }).eq("id", id);
+  const promote = async () => {
+    if (!promoteTarget || busy) return;
+    setBusy(true);
+    const { error } = await supabase.rpc("admin_set_role", { target: promoteTarget.id, new_role: "driver" });
+    setBusy(false);
+    setPromoteTarget(null);
+    if (error) return toast("Sorry, couldn't promote this customer. Try again.");
     toast("[ OK ] Customer promoted to Driver.");
     load();
   };
@@ -86,7 +94,7 @@ export default function AdminDrivers() {
                 <td>{c.phone || "—"}</td>
                 <td>{new Date(c.created_at).toLocaleDateString()}</td>
                 <td style={{ textAlign: "right" }}>
-                  <button className="btn" style={{ padding: "0.3rem 0.6rem", fontSize: "0.7rem" }} onClick={() => promote(c.id)}>
+                  <button className="btn" style={{ padding: "0.3rem 0.6rem", fontSize: "0.7rem" }} onClick={() => setPromoteTarget(c)}>
                     PROMOTE
                   </button>
                 </td>
@@ -95,6 +103,17 @@ export default function AdminDrivers() {
           </tbody>
         </table>
       </div>
+
+      <ConfirmDialog
+        open={!!promoteTarget}
+        title={`Promote ${promoteTarget?.full_name || "this customer"}?`}
+        body="They will get driver access and see assigned trips in their manifest."
+        confirmLabel="MAKE DRIVER"
+        cancelLabel="KEEP AS CUSTOMER"
+        busy={busy}
+        onConfirm={promote}
+        onCancel={() => setPromoteTarget(null)}
+      />
     </>
   );
 }

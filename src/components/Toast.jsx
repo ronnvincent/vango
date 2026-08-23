@@ -7,7 +7,7 @@
     el.setAttribute("role", "status");
     document.body.appendChild(el);
   }
-  el.innerHTML = msg;
+  el.textContent = msg;
   el.classList.add("show");
   clearTimeout(window._vangoToastTimer);
   window._vangoToastTimer = setTimeout(() => el.classList.remove("show"), 7000);

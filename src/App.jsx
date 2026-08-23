@@ -1,4 +1,4 @@
-﻿import { Routes, Route } from "react-router-dom";
+﻿import { Routes, Route, Navigate } from "react-router-dom";
 import RequireRole from "./components/RequireRole";
 import DashLayout from "./components/DashLayout";
 
@@ -57,6 +57,7 @@ export default function App() {
         <Route path="settings" element={<AdminSettings />} />
         <Route path="reports" element={<AdminReports />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

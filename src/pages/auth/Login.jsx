@@ -22,7 +22,7 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const { error } = await signIn({ email, password });
+    const { error } = await signIn({ email: email.trim(), password });
     if (error) setError(friendlyAuthError(error.message));
     setLoading(false);
   };
@@ -42,11 +42,11 @@ export default function Login() {
             {error && <div className="auth-error">▲ {error}</div>}
             <div className="field">
               <label htmlFor="login-email">Email</label>
-              <input id="login-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} disabled={loading} />
+              <input id="login-email" type="email" name="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} disabled={loading} />
             </div>
             <div className="field">
               <label htmlFor="login-password">Password</label>
-              <input id="login-password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
+              <input id="login-password" type="password" name="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
             </div>
             <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
               {loading ? "Authenticating…" : "Sign In →"}

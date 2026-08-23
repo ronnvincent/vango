@@ -21,7 +21,7 @@ export default function SignUp() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const { error } = await signUp(formData);
+    const { error } = await signUp({ ...formData, email: formData.email.trim() });
     if (error) setError(friendlyAuthError(error.message));
     else setSuccess(true);
     setLoading(false);
@@ -52,15 +52,15 @@ export default function SignUp() {
               </div>
               <div className="field">
                 <label htmlFor="su-phone">Phone</label>
-                <input id="su-phone" type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} disabled={loading} />
+                <input id="su-phone" type="tel" name="tel" autoComplete="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} disabled={loading} />
               </div>
               <div className="field">
                 <label htmlFor="su-email">Email</label>
-                <input id="su-email" type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={loading} />
+                <input id="su-email" type="email" name="email" autoComplete="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={loading} />
               </div>
               <div className="field">
                 <label htmlFor="su-password">Password</label>
-                <input id="su-password" type="password" required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} disabled={loading} />
+                <input id="su-password" type="password" name="new-password" autoComplete="new-password" minLength={6} required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} disabled={loading} />
               </div>
               <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
                 {loading ? "Creating Account…" : "Sign Up →"}
