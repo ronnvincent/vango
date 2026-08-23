@@ -38,7 +38,7 @@ export default function DashLayout({ role }) {
     <div className="shell">
       <aside className="side">
         <div className="wordmark"><img src="/logo.png" alt="VanGo Logo" /></div>
-        <nav style={{ display: "flex", flexDirection: "column", gap: "0.25rem", flex: 1 }}>
+        <nav className="side-nav">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => (isActive ? "active" : "")} end={to === "/app" || to === "/driver" || to === "/admin"}>
               <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -48,9 +48,9 @@ export default function DashLayout({ role }) {
             </NavLink>
           ))}
         </nav>
-        <div style={{ marginTop: "auto", paddingTop: "2rem" }}>
+        <div className="side-bottom">
           <div className="lbl" style={{ marginBottom: "0.5rem" }}>{profile?.full_name}</div>
-          <button onClick={handleSignOut} style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'IBM Plex Mono'", fontSize: "0.78rem", letterSpacing: "0.06em", textTransform: "uppercase", padding: "0.55rem 0.6rem", width: "100%", textAlign: "left", opacity: 0.7 }}>
+          <button className="signout-btn" onClick={handleSignOut}>
             <LogOut size={16} />
             Sign Out
           </button>
@@ -66,3 +66,4 @@ export default function DashLayout({ role }) {
     </div>
   );
 }
+
