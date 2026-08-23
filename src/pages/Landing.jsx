@@ -218,8 +218,14 @@ export default function Landing() {
 
   useEffect(() => {
     const io = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
-    }), { threshold: 0.12 });
+      // Reveal when entering the viewport OR when the element is already
+      // scrolled PAST (deep-links like /#fleet can land mid-page before
+      // the observer exists — those must never stay hidden).
+      if (e.isIntersecting || e.boundingClientRect.top < 0) {
+        e.target.classList.add("on");
+        io.unobserve(e.target);
+      }
+    }), { threshold: 0.05 });
     document.querySelectorAll(".rv").forEach(el => io.observe(el));
     return () => io.disconnect();
   }, []);
@@ -254,7 +260,7 @@ export default function Landing() {
       </header>
 
       <div className="m-menu" role="dialog" aria-modal="true" aria-label="Menu">
-        <div className="wrap m-head">
+        <div className="m-head">
           <Link to="/" onClick={navLinkClick}><img src="/logo.png" alt="VanGo Logo" /></Link>
           <button className="m-close" onClick={() => setNavOpen(false)} aria-label="Close menu"><X size={28} /></button>
         </div>
@@ -265,7 +271,7 @@ export default function Landing() {
           <a href="#contact" onClick={navLinkClick}>Contact</a>
           <Link to="/apply" onClick={navLinkClick}>Drive with us</Link>
         </nav>
-        <div className="wrap m-foot">
+        <div className="m-foot">
           <Link className="btn btn-solid m-cta" to="/signup">Book a van</Link>
           <button className="btn m-cta" onClick={() => { setNavOpen(false); window.scrollTo({ top: 0 }); }}>Back to top ↑</button>
         </div>
