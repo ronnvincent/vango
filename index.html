@@ -13,55 +13,69 @@
   <body>
     <div id="root"></div>
     <script>
-      // On-device error console: open the site with /?debug to see real
-      // phone errors without connecting to a computer. Also paints red
-      // boxes around any element overflowing the screen.
+      // On-device lab: open the site with /?debug to get an on-screen panel
+      // showing the live fleet state, a tap tester, and an overflow scanner.
       window.addEventListener("DOMContentLoaded", function () {
         if (location.search.indexOf("debug") === -1) return;
         var s = document.createElement("script");
         s.src = "https://cdn.jsdelivr.net/npm/eruda@3.4.1/eruda.min.js";
         s.onload = function () {
           eruda.init();
-          setTimeout(function () {
-            var w = document.documentElement.clientWidth;
-            var hits = 0;
-            document.querySelectorAll("body *").forEach(function (el) {
-              if (el.closest("#eruda")) return;
-              var r = el.getBoundingClientRect();
-              if ((r.right > w + 1 || r.left < -1) && r.width > 8) {
-                hits++;
-                el.style.outline = "3px solid red";
-                el.style.outlineOffset = "-3px";
-                console.log("OVERFLOW:", el.tagName + "." + String(el.className).slice(0, 60), Math.round(r.left), "->", Math.round(r.right), "(screen", w + ")");
-              }
-            });
-            console.log("Overflow scan done:", hits, "elements wider than", w);
+          var p = document.createElement("div");
+          p.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:rgba(15,15,15,.96);color:#7CFC00;font:11px/1.6 monospace;padding:8px 10px;max-height:48vh;overflow:auto;white-space:pre-wrap";
+          document.body.appendChild(p);
 
-            // Fleet diagnostics
-            setTimeout(function () {
-              try {
-                var rows = document.querySelectorAll(".fleet-row");
-                var info = {
-                  intersectionObserver: typeof IntersectionObserver !== "undefined",
-                  rowCount: rows.length,
-                  rows: [].map.call(rows, function (el) {
-                    var r = el.getBoundingClientRect();
-                    return {
-                      name: (el.querySelector(".f-name") || {}).textContent,
-                      cls: el.className,
-                      opacity: getComputedStyle(el).opacity,
-                      top: Math.round(r.top),
-                      height: Math.round(r.height)
-                    };
-                  })
-                };
-                console.log("FLEET DIAG:", JSON.stringify(info, null, 1));
-              } catch (err) {
-                console.log("FLEET DIAG ERROR:", err.message);
-              }
-            }, 5000);
-            eruda.get("console").log("Overflow elements found: " + hits);
-          }, 4000);
+          function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+          function refresh() {
+            var rows = document.querySelectorAll(".fleet-row");
+            var bundle = (document.querySelector("script[type=module]") || {}).src || "?";
+            var html = "<b>VANGO DEBUG</b>  bundle: " + esc(bundle.split("/").pop()) +
+              "<br>IO=" + (typeof IntersectionObserver !== "undefined") +
+              "  vw=" + document.documentElement.clientWidth +
+              "  scrollW=" + document.documentElement.scrollWidth +
+              (document.documentElement.scrollWidth > document.documentElement.clientWidth ? "  <b>OVERFLOW!</b>" : "") +
+              "<br>fleet rows: " + rows.length;
+            [].forEach.call(rows, function (el, i) {
+              var r = el.getBoundingClientRect();
+              html += "<br>  #" + i + " " + esc(el.className.replace(/fleet-row ?/g, "").trim() || "(none)") +
+                " op=" + getComputedStyle(el).opacity +
+                " top=" + Math.round(r.top) + " h=" + Math.round(r.height) +
+                " detail=" + (el.querySelector(".fd-body") ? "OPEN" : "closed");
+            });
+            html += "<br><button id='vg-tap' style='font:11px monospace;padding:4px 8px;margin:4px 4px 0 0'>TAP TEST ROW 1</button>" +
+              "<button id='vg-scan' style='font:11px monospace;padding:4px 8px;margin:4px 4px 0 0'>SCAN OVERFLOW</button>" +
+              "<button id='vg-hide' style='font:11px monospace;padding:4px 8px;margin:4px 0 0'>HIDE</button>";
+            p.innerHTML = html + (window.__vgMsg ? "<br>" + esc(window.__vgMsg) : "");
+
+            document.getElementById("vg-tap").onclick = function () {
+              var b = document.querySelector(".fleet-main");
+              if (!b) { window.__vgMsg = "TAPTEST: no .fleet-main on page"; refresh(); return; }
+              b.scrollIntoView({ block: "center" });
+              setTimeout(function () {
+                b.click();
+                setTimeout(function () {
+                  var d = document.querySelector(".fd-body");
+                  window.__vgMsg = "TAPTEST row1: detail " + (d ? "OPENED, h=" + Math.round(d.getBoundingClientRect().height) + "px" : "DID NOT OPEN");
+                  refresh();
+                }, 400);
+              }, 500);
+            };
+            document.getElementById("vg-scan").onclick = function () {
+              var w = document.documentElement.clientWidth, n = 0;
+              document.querySelectorAll("body *").forEach(function (el) {
+                if (el.closest("#eruda") || el === p) return;
+                var r = el.getBoundingClientRect();
+                if ((r.right > w + 1 || r.left < -1) && r.width > 8) {
+                  n++; el.style.outline = "3px solid red"; el.style.outlineOffset = "-3px";
+                }
+              });
+              window.__vgMsg = "OVERFLOW SCAN: " + n + " elements outlined red";
+              refresh();
+            };
+            document.getElementById("vg-hide").onclick = function () { p.remove(); };
+          }
+          refresh();
+          setInterval(refresh, 2500);
         };
         document.head.appendChild(s);
       });
