@@ -89,11 +89,11 @@ export default function AdminOverview() {
                   }
                 }}
               >
-                <td className="ref-cell">{b.reference}</td>
-                <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
-                <td>{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
-                <td><StatusBadge status={b.status} /></td>
-                <td className="arr-cell">→</td>
+                <td className="ref-cell" data-label="Ref">{b.reference}</td>
+                <td data-label="Route">{b.locations?.short_name} → {b.dropoff?.short_name}</td>
+                <td data-label="Time">{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
+                <td data-label="Status"><StatusBadge status={b.status} /></td>
+                <td className="arr-cell cell-arrow">→</td>
               </tr>
             ))}
           </tbody>

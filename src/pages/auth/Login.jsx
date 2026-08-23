@@ -2,6 +2,12 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth, homeFor } from "../../hooks/useAuth";
 
+const friendlyAuthError = m =>
+  m?.includes("Invalid login credentials") ? "Wrong email or password."
+  : m?.includes("Email not confirmed") ? "Confirm your email first — check your inbox."
+  : m?.includes("rate limit") ? "Too many attempts — wait a minute and try again."
+  : m;
+
 export default function Login() {
   const { signIn, session, profile } = useAuth();
   const navigate = useNavigate();
@@ -17,7 +23,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     const { error } = await signIn({ email, password });
-    if (error) setError(error.message);
+    if (error) setError(friendlyAuthError(error.message));
     setLoading(false);
   };
 
@@ -35,12 +41,12 @@ export default function Login() {
             </div>
             {error && <div className="auth-error">▲ {error}</div>}
             <div className="field">
-              <label>Email</label>
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} disabled={loading} />
+              <label htmlFor="login-email">Email</label>
+              <input id="login-email" type="email" required value={email} onChange={e => setEmail(e.target.value)} disabled={loading} />
             </div>
             <div className="field">
-              <label>Password</label>
-              <input type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
+              <label htmlFor="login-password">Password</label>
+              <input id="login-password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={loading} />
             </div>
             <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
               {loading ? "Authenticating…" : "Sign In →"}

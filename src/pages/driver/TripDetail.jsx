@@ -10,6 +10,7 @@ export default function TripDetail() {
   const navigate = useNavigate();
   const [b, setB] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
 
   const load = () => {
     supabase.from("bookings").select(`
@@ -31,22 +32,32 @@ export default function TripDetail() {
   if (!b) return <div className="empty">Trip not found</div>;
 
   const handleStart = async () => {
-    await supabase.from("bookings").update({ status: 'en_route' }).eq("id", b.id);
+    if (busy) return;
+    setBusy(true);
+    const { error } = await supabase.from("bookings").update({ status: 'en_route' }).eq("id", b.id);
+    setBusy(false);
+    if (error) return toast("[ ERR ] Could not start trip. Try again.");
     toast("[ OK ] Trip started.");
     load();
   };
 
   const handleComplete = async () => {
+    if (busy) return;
+    setBusy(true);
     const updates = { status: 'completed' };
     if (b.pay_method === 'cash') updates.paid = true;
-    
-    await supabase.from("bookings").update(updates).eq("id", b.id);
+
+    const { error } = await supabase.from("bookings").update(updates).eq("id", b.id);
+    setBusy(false);
+    if (error) return toast("[ ERR ] Could not close out trip. Try again.");
     toast(`[ OK ] Trip closed out.${b.pay_method === 'cash' ? ' Cash collected.' : ''}`);
     navigate("/driver");
   };
 
   return (
-    <div className="duo" style={{ alignItems: "start" }}>
+    <>
+      <button className="back-link" onClick={() => navigate("/driver")}>← Manifest</button>
+      <div className="duo" style={{ alignItems: "start" }}>
       <div>
         <Ticket 
           routeLabel={`${b.locations?.short_name} → ${b.dropoff?.short_name}`}
@@ -76,12 +87,12 @@ export default function TripDetail() {
           <div className="lbl" style={{ marginBottom: "1rem", color: "var(--paper)" }}>DISPATCH CONTROLS</div>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             {b.status === "assigned" && (
-              <button className="btn btn-solid" style={{ background: "var(--paper)", color: "var(--ink)" }} onClick={handleStart}>
+              <button className="btn btn-solid" style={{ background: "var(--paper)", color: "var(--ink)" }} disabled={busy} onClick={handleStart}>
                 START TRIP
               </button>
             )}
             {b.status === "en_route" && (
-              <button className="btn btn-solid" style={{ background: "var(--accent)", color: "var(--paper)", borderColor: "var(--accent)" }} onClick={handleComplete}>
+              <button className="btn btn-solid" style={{ background: "var(--accent)", color: "var(--paper)", borderColor: "var(--accent)" }} disabled={busy} onClick={handleComplete}>
                 COMPLETE {b.pay_method === 'cash' ? '& LOG CASH' : ''}
               </button>
             )}
@@ -91,6 +102,7 @@ export default function TripDetail() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

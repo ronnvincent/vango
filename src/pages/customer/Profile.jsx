@@ -34,24 +34,24 @@ export default function Profile() {
     <div className="panel" style={{ maxWidth: "480px" }}>
       <form onSubmit={handleUpdate}>
         <div className="field">
-          <label>Email (Read-only)</label>
-          <input type="text" value={session?.user?.email || ""} disabled />
+          <label htmlFor="pf-email">Email (Read-only)</label>
+          <input id="pf-email" type="text" value={session?.user?.email || ""} disabled />
         </div>
         <div className="field">
-          <label>Role</label>
-          <input type="text" value={(profile?.role || "").toUpperCase()} disabled />
+          <label htmlFor="pf-role">Role</label>
+          <input id="pf-role" type="text" value={(profile?.role || "").toUpperCase()} disabled />
         </div>
         <div className="field">
-          <label>Full Name</label>
-          <input type="text" value={name} onChange={e => setName(e.target.value)} required disabled={loading} />
+          <label htmlFor="pf-name">Full Name</label>
+          <input id="pf-name" type="text" value={name} onChange={e => setName(e.target.value)} required disabled={loading} />
         </div>
         <div className="field">
-          <label>Phone</label>
-          <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} required disabled={loading} />
+          <label htmlFor="pf-phone">Phone</label>
+          <input id="pf-phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} required disabled={loading} />
         </div>
         <div className="field">
-          <label>New Password (Optional)</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} disabled={loading} placeholder="Leave blank to keep current" />
+          <label htmlFor="pf-pass">New Password (Optional)</label>
+          <input id="pf-pass" type="password" value={password} onChange={e => setPassword(e.target.value)} disabled={loading} placeholder="Leave blank to keep current" />
         </div>
         <button type="submit" className="btn btn-solid" style={{ marginTop: "1rem" }} disabled={loading}>
           {loading ? "Saving…" : "Save Changes"}

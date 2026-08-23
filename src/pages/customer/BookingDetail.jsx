@@ -2,6 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import Ticket from "../../components/Ticket";
+import ConfirmDialog from "../../components/ConfirmDialog";
 import { toast } from "../../components/Toast";
 import { money, CLASS_META, canCancelFree } from "../../lib/pricing";
 
@@ -10,6 +11,8 @@ export default function BookingDetail() {
   const navigate = useNavigate();
   const [b, setB] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [askCancel, setAskCancel] = useState(false);
 
   const load = () => {
     supabase.from("bookings").select(`
@@ -35,29 +38,35 @@ export default function BookingDetail() {
   if (cIdx === -1) cIdx = -1; // cancelled
 
   const handleConfirm = async (method) => {
-    await supabase.from("bookings").update({ status: 'confirmed', pay_method: method }).eq("id", b.id);
+    if (busy) return;
+    setBusy(true);
+    const { error } = await supabase.from("bookings").update({ status: 'confirmed', pay_method: method }).eq("id", b.id);
+    setBusy(false);
+    if (error) return toast("[ ERR ] Could not confirm booking. Try again.");
     toast(`[ OK ] Manifest confirmed. Payment: ${method}`);
     load();
   };
 
   const handleCancel = async () => {
+    if (busy) return;
+    setBusy(true);
     const free = canCancelFree(b);
-    if (!free && !confirm("Late cancellation fee (20%) applies. Proceed?")) return;
-    await supabase.from("bookings").update({ status: 'cancelled' }).eq("id", b.id);
-    toast(`[ OK ] Manifest cancelled${!free ? ' (Fee applied)' : ''}.`);
+    const { error } = await supabase.from("bookings").update({ status: 'cancelled' }).eq("id", b.id);
+    setBusy(false);
+    setAskCancel(false);
+    if (error) return toast("[ ERR ] Could not cancel booking. Try again.");
+    toast(`[ OK ] Manifest cancelled${free ? "" : " (Fee applied)"}.`);
     load();
   };
 
-  const handleMarkPaid = async () => {
-    await supabase.from("bookings").update({ paid: true }).eq("id", b.id);
-    toast("[ OK ] Payment recorded.");
-    load();
-  };
-
+  const lateFee = money(Number(b.fare) * 0.2);
+  const refund = money(Number(b.fare) * 0.8);
   const showDriver = ["assigned", "en_route", "completed"].includes(b.status);
 
   return (
-    <div className="duo" style={{ alignItems: "start" }}>
+    <>
+      <button className="back-link" onClick={() => navigate("/app")}>← My Trips</button>
+      <div className="duo" style={{ alignItems: "start" }}>
       <div>
         <Ticket 
           routeLabel={`${b.locations?.short_name} → ${b.dropoff?.short_name}`}
@@ -105,22 +114,32 @@ export default function BookingDetail() {
         <div className="action-bar">
           {b.status === "pending" && (
             <>
-              <button className="btn btn-solid" onClick={() => handleConfirm('online')}>Confirm & Pay Online</button>
-              <button className="btn" onClick={() => handleConfirm('cash')}>Confirm (Pay Cash)</button>
+              <button className="btn btn-solid" disabled={busy} onClick={() => handleConfirm('online')}>Confirm & Pay Online</button>
+              <button className="btn" disabled={busy} onClick={() => handleConfirm('cash')}>Confirm (Pay Cash)</button>
             </>
-          )}
-          
-          {b.pay_method === 'online' && !b.paid && ["confirmed", "assigned", "en_route"].includes(b.status) && (
-            <button className="btn btn-solid" onClick={handleMarkPaid}>MARK PAID</button>
           )}
 
           {["pending", "confirmed"].includes(b.status) && (
-            <button className="btn" style={{ color: "var(--accent)", borderColor: "var(--accent)" }} onClick={handleCancel}>
+            <button className="btn btn-danger" disabled={busy} onClick={() => setAskCancel(true)}>
               Cancel Booking
             </button>
           )}
         </div>
       </div>
-    </div>
+      </div>
+
+      <ConfirmDialog
+        open={askCancel}
+        title="Cancel this booking?"
+        body={canCancelFree(b)
+          ? "You're outside the 4-hour cutoff — cancellation is free."
+          : <>Late cancellation: a <b>{lateFee} fee (20%)</b> applies. Refund: <b>{refund}</b>.</>}
+        confirmLabel="CANCEL BOOKING"
+        cancelLabel="KEEP BOOKING"
+        busy={busy}
+        onConfirm={handleCancel}
+        onCancel={() => setAskCancel(false)}
+      />
+    </>
   );
 }

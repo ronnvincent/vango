@@ -40,6 +40,22 @@ export default function NewBooking() {
         setFrom(lRes.data[0].id);
         setTo(lRes.data[1].id);
       }
+      // Restore quote carried over from the landing page after signup
+      const saved = sessionStorage.getItem("vango_quote");
+      if (saved && lRes.data?.length) {
+        try {
+          const q = JSON.parse(saved);
+          const f = lRes.data.find(l => l.short_name === q.fromName);
+          const t = lRes.data.find(l => l.short_name === q.toName);
+          if (f) setFrom(f.id);
+          if (t && t.id !== f?.id) setTo(t.id);
+          if (CLASS_META[q.vClass]) setVClass(q.vClass);
+          if (q.pax >= 1) setPax(Math.min(19, q.pax));
+          if (q.date) setDate(q.date);
+          if (q.time) setTime(q.time);
+        } catch { /* malformed quote — ignore */ }
+        sessionStorage.removeItem("vango_quote");
+      }
     });
   }, []);
 
@@ -69,7 +85,7 @@ export default function NewBooking() {
         distance_km: dKm,
         passengers: pax,
         fare,
-        scheduled_at: `${date}T${time}:00Z`,
+        scheduled_at: new Date(`${date}T${time}`).toISOString(),
         status: 'pending'
       }).select().single();
       
@@ -92,15 +108,15 @@ export default function NewBooking() {
       <div>
         <div className="duo">
           <div className="field">
-            <label>Departure Terminal</label>
-            <select value={from} onChange={e => setFrom(e.target.value)} required>
+            <label htmlFor="nb-from">Departure Terminal</label>
+            <select id="nb-from" value={from} onChange={e => setFrom(e.target.value)} required>
               <option value="" disabled>Select pickup</option>
               {locs.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
           </div>
           <div className="field">
-            <label>Arrival Terminal</label>
-            <select value={to} onChange={e => setTo(e.target.value)} required>
+            <label htmlFor="nb-to">Arrival Terminal</label>
+            <select id="nb-to" value={to} onChange={e => setTo(e.target.value)} required>
               <option value="" disabled>Select dropoff</option>
               {locs.map(l => <option key={l.id} value={l.id} disabled={l.id == from}>{l.name}</option>)}
             </select>
@@ -135,6 +151,10 @@ export default function NewBooking() {
             <button type="button" onClick={() => setPax(Math.min(19, pax + 1))}>+</button>
           </div>
           {overCap && <p className="overcap show">Over capacity — size up the van class</p>}
+        </div>
+        <div className="fare-bar" aria-live="polite">
+          <span className="lbl">{fromName} → {toName}</span>
+          <b>{overCap ? "FIX PAX" : money(fare)}</b>
         </div>
         <div style={{ marginTop: "2rem" }}>
           <button type="submit" className="btn btn-solid" style={{ width: "100%", padding: "1.2rem", fontSize: "1.1rem" }} disabled={overCap || from === to || loading}>

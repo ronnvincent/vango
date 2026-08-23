@@ -94,14 +94,14 @@ export default function DriverHome() {
                     }
                   }}
                 >
-                  <td className="time-cell">
+                  <td className="time-cell" data-label="Time">
                     {new Date(b.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </td>
-                  <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
-                  <td>{String(b.passengers).padStart(2, "0")}</td>
-                  <td>{b.vans?.class.toUpperCase()}</td>
-                  <td><StatusBadge status={b.status} /></td>
-                  <td className="open-cell">OPEN →</td>
+                  <td data-label="Route">{b.locations?.short_name} → {b.dropoff?.short_name}</td>
+                  <td data-label="Pax">{String(b.passengers).padStart(2, "0")}</td>
+                  <td data-label="Class">{b.vans?.class.toUpperCase()}</td>
+                  <td data-label="Status"><StatusBadge status={b.status} /></td>
+                  <td className="open-cell cell-arrow">OPEN →</td>
                 </tr>
               ))}
             </tbody>

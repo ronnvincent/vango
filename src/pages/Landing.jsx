@@ -112,7 +112,7 @@ function Magnet({ children, strength = 0.3 }) {
 function ClickSpark({ color = "#FF4400" }) {
   const ref = useRef(null);
   useEffect(() => {
-    if (reduced() || !ref.current) return;
+    if (reduced() || !matchMedia("(pointer:fine)").matches || !ref.current) return;
     const canvas = ref.current, ctx = canvas.getContext("2d");
     let parts = [], raf = null;
     const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; };
@@ -436,7 +436,14 @@ export default function Landing() {
               </div>
               <div className="tk-stub">
                 <div className="barcode" aria-hidden="true" />
-                <Link to="/signup" className="btn issue-btn" style={{ display: 'block', textAlign: 'center' }}>CREATE ACCOUNT TO BOOK</Link>
+                <Link
+                  to="/signup"
+                  className="btn issue-btn"
+                  style={{ display: 'block', textAlign: 'center' }}
+                  onClick={() => sessionStorage.setItem("vango_quote", JSON.stringify({
+                    fromName: SHORT[from], toName: SHORT[to], vClass, pax, date: qDate, time: qTime
+                  }))}
+                >CREATE ACCOUNT TO BOOK</Link>
               </div>
             </aside>
           </form>

@@ -2,6 +2,12 @@
 import { Link, Navigate } from "react-router-dom";
 import { useAuth, homeFor } from "../../hooks/useAuth";
 
+const friendlyAuthError = m =>
+  m?.includes("already registered") ? "That email already has an account — sign in instead."
+  : m?.includes("rate limit") ? "Too many attempts — wait a minute and try again."
+  : m?.includes("Password") || m?.includes("password") ? "Password too weak — use at least 6 characters."
+  : m;
+
 export default function SignUp() {
   const { signUp, session, profile } = useAuth();
   const [formData, setFormData] = useState({ fullName: "", phone: "", email: "", password: "" });
@@ -16,7 +22,7 @@ export default function SignUp() {
     setError("");
     setLoading(true);
     const { error } = await signUp(formData);
-    if (error) setError(error.message);
+    if (error) setError(friendlyAuthError(error.message));
     else setSuccess(true);
     setLoading(false);
   };
@@ -41,20 +47,20 @@ export default function SignUp() {
               </div>
               {error && <div className="auth-error">▲ {error}</div>}
               <div className="field">
-                <label>Full Name</label>
-                <input type="text" required value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} disabled={loading} />
+                <label htmlFor="su-name">Full Name</label>
+                <input id="su-name" type="text" required value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} disabled={loading} />
               </div>
               <div className="field">
-                <label>Phone</label>
-                <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} disabled={loading} />
+                <label htmlFor="su-phone">Phone</label>
+                <input id="su-phone" type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} disabled={loading} />
               </div>
               <div className="field">
-                <label>Email</label>
-                <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={loading} />
+                <label htmlFor="su-email">Email</label>
+                <input id="su-email" type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={loading} />
               </div>
               <div className="field">
-                <label>Password</label>
-                <input type="password" required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} disabled={loading} />
+                <label htmlFor="su-password">Password</label>
+                <input id="su-password" type="password" required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} disabled={loading} />
               </div>
               <button type="submit" className="btn btn-solid" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
                 {loading ? "Creating Account…" : "Sign Up →"}

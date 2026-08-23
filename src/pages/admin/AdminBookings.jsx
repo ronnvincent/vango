@@ -90,12 +90,12 @@ export default function AdminBookings() {
                     }
                   }}
                 >
-                  <td className="ref-cell">{b.reference}</td>
-                  <td>{b.customer?.full_name}</td>
-                  <td>{b.locations?.short_name} → {b.dropoff?.short_name}</td>
-                  <td>{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
-                  <td><StatusBadge status={b.status} /></td>
-                  <td>{money(b.fare)}</td>
+                  <td className="ref-cell" data-label="Ref">{b.reference}</td>
+                  <td data-label="Customer">{b.customer?.full_name}</td>
+                  <td data-label="Route">{b.locations?.short_name} → {b.dropoff?.short_name}</td>
+                  <td data-label="Departure">{new Date(b.scheduled_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</td>
+                  <td data-label="Status"><StatusBadge status={b.status} /></td>
+                  <td data-label="Fare">{money(b.fare)}</td>
                 </tr>
               ))}
             </tbody>
