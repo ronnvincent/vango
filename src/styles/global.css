@@ -253,10 +253,29 @@ footer{margin-top:6rem;border-top:1.5px solid var(--ink)}
 
 
 
+
 /* VAN ANIMATIONS */
 @keyframes spin { 100% { transform: rotate(360deg); } }
-.wheel { transform-box: fill-box; transform-origin: center; animation: spin 1.2s linear infinite; }
+.wheel { transform-box: fill-box; transform-origin: center; animation: spin 0.25s linear infinite; }
+
 @keyframes roadMove { 100% { stroke-dashoffset: 120; } }
-.road-line { stroke-dasharray: 20 20; animation: roadMove 0.8s linear infinite; }
-@keyframes vanBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
-.van-body { animation: vanBounce 0.3s ease-in-out infinite; }
+.road-line { stroke-dasharray: 40 20; animation: roadMove 0.3s linear infinite; }
+
+@keyframes vanBounce { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-2px) rotate(-0.5deg); } }
+.van-body { transform-origin: bottom center; animation: vanBounce 0.2s ease-in-out infinite; }
+
+@keyframes wind {
+  0% { transform: translateX(100px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(-500px); opacity: 0; }
+}
+.speed-lines line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  animation: wind 0.6s linear infinite;
+}
+.speed-lines line:nth-child(1) { animation-duration: 0.5s; animation-delay: 0.1s; }
+.speed-lines line:nth-child(2) { animation-duration: 0.7s; animation-delay: 0.3s; }
+.speed-lines line:nth-child(3) { animation-duration: 0.4s; animation-delay: 0.2s; }
