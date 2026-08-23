@@ -338,17 +338,15 @@ export default function Landing() {
                   <span className="f-col f-status"><span className={`status ${f.low ? 'low' : ''}`}>{f.status}</span></span>
                   <span className="f-plus">+</span>
                 </button>
-                <div className="fleet-detail">
-                  <div className="fd-in">
-                    <div className="fd-body">
-                      <div>
-                        <p className="fd-desc">{f.desc}</p>
-                        <p className="fd-specs">{f.specs.map((s,i) => <span key={i}>{s}</span>)}</p>
-                      </div>
-                      <button className="btn btn-solid" onClick={() => { setVClass(f.id); document.getElementById('manifest').scrollIntoView({behavior:'smooth'}); }}>Select →</button>
+                {openFleet === f.id && (
+                  <div className="fd-body">
+                    <div>
+                      <p className="fd-desc">{f.desc}</p>
+                      <p className="fd-specs">{f.specs.map((s,i) => <span key={i}>{s}</span>)}</p>
                     </div>
+                    <button className="btn btn-solid" onClick={() => { setVClass(f.id); document.getElementById('manifest').scrollIntoView({behavior:'smooth'}); }}>Select →</button>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>

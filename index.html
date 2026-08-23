@@ -14,12 +14,31 @@
     <div id="root"></div>
     <script>
       // On-device error console: open the site with /?debug to see real
-      // phone errors without connecting to a computer.
+      // phone errors without connecting to a computer. Also paints red
+      // boxes around any element overflowing the screen.
       window.addEventListener("DOMContentLoaded", function () {
         if (location.search.indexOf("debug") === -1) return;
         var s = document.createElement("script");
         s.src = "https://cdn.jsdelivr.net/npm/eruda@3.4.1/eruda.min.js";
-        s.onload = function () { eruda.init(); };
+        s.onload = function () {
+          eruda.init();
+          setTimeout(function () {
+            var w = document.documentElement.clientWidth;
+            var hits = 0;
+            document.querySelectorAll("body *").forEach(function (el) {
+              if (el.closest("#eruda")) return;
+              var r = el.getBoundingClientRect();
+              if ((r.right > w + 1 || r.left < -1) && r.width > 8) {
+                hits++;
+                el.style.outline = "3px solid red";
+                el.style.outlineOffset = "-3px";
+                console.log("OVERFLOW:", el.tagName + "." + String(el.className).slice(0, 60), Math.round(r.left), "->", Math.round(r.right), "(screen", w + ")");
+              }
+            });
+            console.log("Overflow scan done:", hits, "elements wider than", w);
+            eruda.get("console").log("Overflow elements found: " + hits);
+          }, 4000);
+        };
         document.head.appendChild(s);
       });
     </script>
